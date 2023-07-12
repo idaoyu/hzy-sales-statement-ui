@@ -20,7 +20,7 @@
                       v-model="formData.name"
                       placeholder="如不输入则查询所有商品"
                       style="width: 240px"
-                      @press-enter="listGet"
+                      @press-enter="search"
                     /> </a-form-item
                 ></a-col>
                 <a-col :span="7">
@@ -33,13 +33,13 @@
                       v-model="formData.tag"
                       placeholder="如不输入则查询所有标签"
                       style="width: 240px"
-                      @press-enter="listGet"
+                      @press-enter="search"
                     /> </a-form-item
                 ></a-col>
               </a-row>
               <a-row justify="center">
                 <a-col :span="2">
-                  <a-button type="primary" @click="listGet">
+                  <a-button type="primary" @click="search">
                     <template #icon>
                       <icon-search />
                     </template>
@@ -78,7 +78,13 @@
               <a-table-column
                 title="商品标签(别名)"
                 data-index="productAliasName"
-              ></a-table-column>
+              >
+                <template #cell="{ record }">
+                  <a-tag v-if="record.productAliasName">{{
+                    record.productAliasName
+                  }}</a-tag></template
+                ></a-table-column
+              >
               <a-table-column
                 title="商品进价"
                 data-index="costPrice"
@@ -221,6 +227,12 @@
 
   const reset = () => {
     formData.value = { name: '', tag: '', pageNo: 1, pageSize: 10 };
+    listGet();
+  };
+
+  const search = () => {
+    formData.value.pageNo = 1;
+    formData.value.pageSize = 10;
     listGet();
   };
 
