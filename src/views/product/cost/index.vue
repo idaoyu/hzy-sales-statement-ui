@@ -5,7 +5,7 @@
         <a-col :span="24">
           <a-card title="进价管理" hoverable>
             <template #extra>
-              <a-link>新增商品</a-link>
+              <a-link @click="openAddProductModal">新增商品</a-link>
             </template>
             <a-form :model="formData">
               <a-row>
@@ -20,6 +20,7 @@
                       v-model="formData.name"
                       placeholder="如不输入则查询所有商品"
                       style="width: 240px"
+                      @press-enter="listGet"
                     /> </a-form-item
                 ></a-col>
                 <a-col :span="7">
@@ -32,6 +33,7 @@
                       v-model="formData.tag"
                       placeholder="如不输入则查询所有标签"
                       style="width: 240px"
+                      @press-enter="listGet"
                     /> </a-form-item
                 ></a-col>
               </a-row>
@@ -164,7 +166,12 @@
 
 <script lang="ts" setup>
   import { ref } from 'vue';
-  import { listProduct, deleteProduct, updateProduct } from '@/api/product';
+  import {
+    listProduct,
+    deleteProduct,
+    updateProduct,
+    addProduct,
+  } from '@/api/product';
   import Message from '@arco-design/web-vue/es/message';
 
   const operation = ref('修改商品');
@@ -219,12 +226,31 @@
 
   const handleBeforeOk = (done: any) => {
     const data = modalForm.value;
-    updateProduct(data.id, data.costPrice).then((res) => {
-      Message.success(res.data);
-      modalForm.value = modalFormInitData;
-      listGet();
-      done();
-    });
+    if (operation.value === '修改商品') {
+      updateProduct(data.id, data.costPrice).then((res) => {
+        Message.success(res.data);
+        modalForm.value = modalFormInitData;
+        listGet();
+        done();
+      });
+    } else {
+      addProduct(data).then((res) => {
+        Message.success(res.data);
+        listGet();
+        done();
+      });
+    }
+  };
+
+  const openAddProductModal = () => {
+    operation.value = '新增商品';
+    modalForm.value = {
+      id: 0,
+      productName: '',
+      productAliasName: '',
+      costPrice: 0,
+    };
+    visible.value = true;
   };
 </script>
 
