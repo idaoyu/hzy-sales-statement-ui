@@ -70,8 +70,8 @@
 <script lang="ts" setup>
   import Message from '@arco-design/web-vue/es/message';
   import { RequestOption } from '@arco-design/web-vue/es/upload';
-  import axios from 'axios';
   import { ref } from 'vue';
+  import { excelHandle } from '@/api/statistics';
 
   const loading = ref(false);
 
@@ -95,25 +95,20 @@
     hint.value = hintList[current.value - 1];
   };
 
-  const time = new Date();
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
   const formData = ref({
-    month: `${time.getFullYear()}-${
-      time.getMonth() + 1 < 10 ? `0${time.getMonth()}${1}` : time.getMonth() + 1
-    }`,
+    month: `${year}-${month.toString().padStart(2, '0')}`,
   });
   const uploadFile = (option: RequestOption) => {
     loading.value = true;
     const { onSuccess, onError, fileItem } = option;
     const submitFromData = new FormData();
-    submitFromData.append('file', <File>fileItem.file);
+    submitFromData.append('file', fileItem.file as File);
     submitFromData.append('yeah', formData.value.month.split('-')[0]);
     submitFromData.append('month', formData.value.month.split('-')[1]);
-    axios({
-      url: '/api/data_statistics/excel_handle',
-      method: 'post',
-      responseType: 'blob',
-      data: submitFromData,
-    })
+    excelHandle(submitFromData)
       .then((res) => {
         const fileNameArray =
           res.headers['content-disposition'].match(/fileName=(.*)/);
