@@ -200,12 +200,12 @@
     listGet();
   };
 
-  const updateProductInfo = (record) => {
+  const updateProductInfo = (record: any) => {
     operation.value = '修改商品';
     modalForm.value = record;
     visible.value = true;
   };
-  const delectProductInfo = (record) => {
+  const delectProductInfo = (record: any) => {
     deleteProduct(record.id).then((res) => {
       Message.success(res.data);
       listGet();
@@ -217,7 +217,7 @@
     listGet();
   };
 
-  const handleBeforeOk = (done) => {
+  const handleBeforeOk = (done: any) => {
     const data = modalForm.value;
     updateProduct(data.id, data.costPrice).then((res) => {
       Message.success(res.data);
