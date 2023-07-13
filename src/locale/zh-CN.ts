@@ -25,6 +25,8 @@ export default {
   'menu.statement': '报表处理',
   'menu.product': '商品管理',
   'menu.product.cost': '进价管理',
+  'menu.organization': '机构管理',
+  'menu.organization.manage': '机构负责人管理',
   ...localeSettings,
   ...localeMessageBox,
   ...localeLogin,

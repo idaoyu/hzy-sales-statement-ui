@@ -99,21 +99,15 @@
               ></a-table-column>
               <a-table-column title="操作"
                 ><template #cell="{ record }">
-                  <a-row
-                    ><a-col :span="7">
-                      <a-button @click="updateProductInfo(record)"
-                        >修改</a-button
-                      >
-                    </a-col>
-                    <a-col :span="12">
-                      <a-popconfirm
-                        content="确定要删除这条记录吗？"
-                        @ok="delectProductInfo(record)"
-                      >
-                        <a-button>删除</a-button>
-                      </a-popconfirm>
-                    </a-col></a-row
-                  >
+                  <a-space>
+                    <a-button @click="updateProductInfo(record)">修改</a-button>
+                    <a-popconfirm
+                      content="确定要删除这条记录吗？"
+                      @ok="delectProductInfo(record)"
+                    >
+                      <a-button>删除</a-button>
+                    </a-popconfirm>
+                  </a-space>
                 </template></a-table-column
               >
             </template>
