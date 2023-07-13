@@ -16,3 +16,7 @@ export function listOrganization(params: GetInfo) {
 export function deleteOrganization(id: number) {
   return axios.delete<any>(`/api/organization/${id}`);
 }
+
+export function addOrganization(data: any) {
+  return axios.post<any>('/api/organization', data);
+}

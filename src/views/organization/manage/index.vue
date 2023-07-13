@@ -5,7 +5,7 @@
         <a-col :span="24">
           <a-card title="机构负责人管理" hoverable>
             <template #extra>
-              <a-link>新增机构</a-link>
+              <a-link @click="visible = true">新增机构</a-link>
             </template>
             <a-form :model="formData">
               <a-row>
@@ -166,15 +166,49 @@
         />
       </a-row>
     </a-space>
+    <a-modal
+      v-model:visible="visible"
+      title="新增机构"
+      :width="600"
+      @cancel="handleCancel"
+      @before-ok="handleBeforeOk"
+    >
+      <a-form :model="modalForm">
+        <a-form-item required field="type" label="机构类型">
+          <a-radio-group v-model:model-value="modalForm.type">
+            <a-radio value="药店">药店</a-radio>
+            <a-radio value="分销商">分销商</a-radio>
+          </a-radio-group>
+        </a-form-item>
+        <a-form-item
+          v-if="modalForm.type === '药店'"
+          :required="modalForm.type === '药店'"
+          field="organizationName"
+          label="负责人"
+        >
+          <a-checkbox-group v-model="modalForm.principalId">
+            <a-checkbox :value="1">李梦</a-checkbox>
+            <a-checkbox :value="2">张怡静</a-checkbox>
+            <a-checkbox :value="3">张艳霞</a-checkbox>
+          </a-checkbox-group>
+        </a-form-item>
+        <a-form-item required field="organizationName" label="机构名字">
+          <a-input v-model="modalForm.organizationName"></a-input>
+        </a-form-item>
+        <a-form-item required field="organizationAlias" label="机构标签">
+          <a-input v-model="modalForm.organizationAlias"></a-input>
+        </a-form-item>
+      </a-form>
+    </a-modal>
   </div>
 </template>
 
 <script lang="ts" setup>
   import { ref } from 'vue';
   import {
-    GetInfo,
     listOrganization,
     deleteOrganization,
+    addOrganization,
   } from '@/api/organization';
   import Message from '@arco-design/web-vue/es/message';
 
@@ -183,6 +217,7 @@
   const loading = ref(false);
   const total = ref(0);
   const tableData = ref([]);
+  const visible = ref(false);
 
   const formData = ref({
     organizationName: '',
@@ -193,7 +228,7 @@
 
   const doListProduct = () => {
     loading.value = true;
-    const params: GetInfo = {};
+    const params: any = {};
     Object.assign(params, formData.value);
     params.pageNo = pageNo.value;
     params.pageSize = pageSize.value;
@@ -231,16 +266,47 @@
     doListProduct();
   };
 
-  const updateOrganization = (record) => {
+  const updateOrganization = (record: any) => {
     Message.warning({
       content: '暂不支持修改操作',
       duration: 5 * 1000,
     });
   };
-  const delectOrganization = (record) => {
+  const delectOrganization = (record: any) => {
     deleteOrganization(record.id).then((res) => {
       Message.success(res.data);
       doListProduct();
+    });
+  };
+
+  const modalForm = ref({
+    type: '',
+    organizationName: '',
+    principalId: [],
+    organizationAlias: '',
+  });
+
+  const handleCancel = () => {
+    visible.value = false;
+    modalForm.value = {
+      type: '',
+      organizationName: '',
+      principalId: [],
+      organizationAlias: '',
+    };
+  };
+
+  const handleBeforeOk = (done: any) => {
+    addOrganization(modalForm.value).then((res) => {
+      modalForm.value = {
+        type: '',
+        organizationName: '',
+        principalId: [],
+        organizationAlias: '',
+      };
+      Message.success(res.data);
+      doListProduct();
+      done();
     });
   };
 </script>
