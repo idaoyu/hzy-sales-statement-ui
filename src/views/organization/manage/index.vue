@@ -168,10 +168,11 @@
       v-model:visible="visible"
       title="新增机构"
       :width="600"
+      :on-before-ok="handleBeforeOk"
+      :ok-loading="okLoading"
       @cancel="handleCancel"
-      @before-ok="handleBeforeOk"
     >
-      <a-form ref="formRef" :model="modalForm" @submit="handleBeforeOk">
+      <a-form ref="formRef" :model="modalForm">
         <a-form-item field="type" label="机构类型">
           <a-radio-group v-model:model-value="modalForm.type">
             <a-radio value="药店">药店</a-radio>
@@ -180,7 +181,6 @@
         </a-form-item>
         <a-form-item
           v-if="modalForm.type === '药店'"
-          :required="modalForm.type === '药店'"
           field="organizationName"
           label="负责人"
         >
@@ -295,18 +295,26 @@
     };
   };
 
+  const okLoading = ref(false);
+
   const handleBeforeOk = (done: any) => {
-    addOrganization(modalForm.value).then((res) => {
-      modalForm.value = {
-        type: '',
-        organizationName: '',
-        principalId: [],
-        organizationAlias: '',
-      };
-      Message.success(res.data);
-      doListProduct();
-      done();
-    });
+    okLoading.value = true;
+    addOrganization(modalForm.value)
+      .then((res) => {
+        modalForm.value = {
+          type: '',
+          organizationName: '',
+          principalId: [],
+          organizationAlias: '',
+        };
+        Message.success(res.data);
+        doListProduct();
+        done();
+      })
+      .catch(() => {
+        done(false);
+        okLoading.value = false;
+      });
   };
 </script>
 
