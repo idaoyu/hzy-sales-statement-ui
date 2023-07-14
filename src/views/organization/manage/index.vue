@@ -136,9 +136,7 @@
               <a-table-column title="操作"
                 ><template #cell="{ record }">
                   <a-space>
-                    <a-button @click="updateOrganization(record)"
-                      >修改</a-button
-                    >
+                    <a-button @click="updateOrganization">修改</a-button>
                     <a-popconfirm
                       content="确定要删除这条记录吗？"
                       @ok="delectOrganization(record)"
@@ -173,8 +171,8 @@
       @cancel="handleCancel"
       @before-ok="handleBeforeOk"
     >
-      <a-form :model="modalForm">
-        <a-form-item required field="type" label="机构类型">
+      <a-form ref="formRef" :model="modalForm" @submit="handleBeforeOk">
+        <a-form-item field="type" label="机构类型">
           <a-radio-group v-model:model-value="modalForm.type">
             <a-radio value="药店">药店</a-radio>
             <a-radio value="分销商">分销商</a-radio>
@@ -192,10 +190,10 @@
             <a-checkbox :value="3">张艳霞</a-checkbox>
           </a-checkbox-group>
         </a-form-item>
-        <a-form-item required field="organizationName" label="机构名字">
+        <a-form-item field="organizationName" label="机构名字">
           <a-input v-model="modalForm.organizationName"></a-input>
         </a-form-item>
-        <a-form-item required field="organizationAlias" label="机构标签">
+        <a-form-item field="organizationAlias" label="机构标签">
           <a-input v-model="modalForm.organizationAlias"></a-input>
         </a-form-item>
       </a-form>
@@ -266,7 +264,8 @@
     doListProduct();
   };
 
-  const updateOrganization = (record: any) => {
+  const updateOrganization = () => {
+    // const updateOrganization = (record: any) => {
     Message.warning({
       content: '暂不支持修改操作',
       duration: 5 * 1000,
