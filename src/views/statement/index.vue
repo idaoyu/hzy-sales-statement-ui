@@ -104,8 +104,8 @@
   });
   const uploadFile = (option: RequestOption) => {
     loading.value = true;
+    const { onSuccess, onError, fileItem } = option;
     getUserInfo().then(() => {
-      const { onSuccess, onError, fileItem } = option;
       const submitFromData = new FormData();
       submitFromData.append('file', fileItem.file as File);
       submitFromData.append('yeah', formData.value.month.split('-')[0]);
@@ -138,8 +138,8 @@
           Message.error(error);
           onError();
         });
-      return { onSuccess, onError };
     });
+    return { onSuccess, onError };
   };
 </script>
 
