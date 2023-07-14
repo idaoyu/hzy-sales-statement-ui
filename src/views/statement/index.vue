@@ -72,6 +72,7 @@
   import { RequestOption } from '@arco-design/web-vue/es/upload';
   import { ref } from 'vue';
   import { excelHandle } from '@/api/statistics';
+  import { getUserInfo } from '@/api/user';
 
   const loading = ref(false);
 
@@ -103,40 +104,42 @@
   });
   const uploadFile = (option: RequestOption) => {
     loading.value = true;
-    const { onSuccess, onError, fileItem } = option;
-    const submitFromData = new FormData();
-    submitFromData.append('file', fileItem.file as File);
-    submitFromData.append('yeah', formData.value.month.split('-')[0]);
-    submitFromData.append('month', formData.value.month.split('-')[1]);
-    excelHandle(submitFromData)
-      .then((res) => {
-        const fileNameArray =
-          res.headers['content-disposition'].match(/fileName=(.*)/);
-        if (!fileNameArray) {
-          throw new Error('系统出现错误');
-        }
-        const fileName = fileNameArray[1];
-        const blob = new Blob([res.data], {
-          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    getUserInfo().then(() => {
+      const { onSuccess, onError, fileItem } = option;
+      const submitFromData = new FormData();
+      submitFromData.append('file', fileItem.file as File);
+      submitFromData.append('yeah', formData.value.month.split('-')[0]);
+      submitFromData.append('month', formData.value.month.split('-')[1]);
+      excelHandle(submitFromData)
+        .then((res) => {
+          const fileNameArray =
+            res.headers['content-disposition'].match(/fileName=(.*)/);
+          if (!fileNameArray) {
+            throw new Error('系统出现错误');
+          }
+          const fileName = fileNameArray[1];
+          const blob = new Blob([res.data], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          });
+          const a = document.createElement('a');
+          const URL = window.URL || window.webkitURL;
+          const herf = URL.createObjectURL(blob);
+          a.href = herf;
+          a.download = decodeURI(fileName);
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(herf);
+          Message.success('文件处理成功!处理好的文件已经为您自动下载');
+          loading.value = false;
+          onSuccess();
+        })
+        .catch((error) => {
+          Message.error(error);
+          onError();
         });
-        const a = document.createElement('a');
-        const URL = window.URL || window.webkitURL;
-        const herf = URL.createObjectURL(blob);
-        a.href = herf;
-        a.download = decodeURI(fileName);
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(herf);
-        Message.success('文件处理成功!处理好的文件已经为您自动下载');
-        loading.value = false;
-        onSuccess();
-      })
-      .catch((error) => {
-        Message.error(error);
-        onError();
-      });
-    return { onSuccess, onError };
+      return { onSuccess, onError };
+    });
   };
 </script>
 
