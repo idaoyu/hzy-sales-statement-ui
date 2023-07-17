@@ -155,7 +155,8 @@
   const uploadFile = (option: RequestOption) => {
     loading.value = true;
     const { onSuccess, onError, fileItem } = option;
-    const requestId = crypto.randomUUID().replace('-', '');
+    const requestId = crypto.randomUUID().replace(/-/g, '');
+    debugger;
     getUserInfo().then(() => {
       const submitFromData = new FormData();
       submitFromData.append('file', fileItem.file as File);
