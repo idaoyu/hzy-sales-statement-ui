@@ -309,6 +309,7 @@
         };
         Message.success(res.data);
         doListProduct();
+        okLoading.value = false;
         done();
       })
       .catch(() => {

@@ -1,5 +1,7 @@
 <template>
-  <a-layout-footer class="footer">合智源</a-layout-footer>
+  <a-layout-footer class="footer"
+    >Powered by 知榕易云. 备案号: 黑ICP备2023001863号-1</a-layout-footer
+  >
 </template>
 
 <script lang="ts" setup></script>

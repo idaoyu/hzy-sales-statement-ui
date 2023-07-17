@@ -64,6 +64,56 @@
         </a-row>
       </a-space>
     </a-spin>
+    <a-modal
+      v-model:visible="visible"
+      title="请完成后重试"
+      :closable="false"
+      :mask-closable="false"
+      ok-text="确认"
+      :hide-cancel="true"
+      @before-ok="handleBeforeOk"
+    >
+      <a-card hoverable :style="{ width: '100%', marginBottom: '20px' }">
+        <div
+          :style="{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }"
+        >
+          <span
+            :style="{ display: 'flex', alignItems: 'center', color: '#1D2129' }"
+          >
+            <a-avatar
+              :style="{ marginRight: '8px', backgroundColor: '#165DFF' }"
+              :size="28"
+            >
+              !
+            </a-avatar>
+            <a-typography-text
+              >未查询到以下商品或机构信息,请到相应配置页面配置后重试</a-typography-text
+            >
+          </span>
+        </div>
+      </a-card>
+      <a-table
+        :data="warnMessage"
+        :bordered="true"
+        :pagination="false"
+        :scroll="{ x: '100%', y: '300px' }"
+      >
+        <template #columns>
+          <a-table-column title="类型" data-index="type">
+            <template #cell="{ record }">
+              <a-tag>{{
+                record.type === 'organization' ? '机构' : '商品'
+              }}</a-tag>
+            </template>
+          </a-table-column>
+          <a-table-column title="名字" data-index="message"> </a-table-column>
+        </template>
+      </a-table>
+    </a-modal>
   </div>
 </template>
 
@@ -71,10 +121,12 @@
   import Message from '@arco-design/web-vue/es/message';
   import { RequestOption } from '@arco-design/web-vue/es/upload';
   import { ref } from 'vue';
-  import { excelHandle } from '@/api/statistics';
+  import { excelHandle, getWarnMessage } from '@/api/statistics';
   import { getUserInfo } from '@/api/user';
 
   const loading = ref(false);
+
+  const visible = ref(false);
 
   const current = ref(1);
   const hintList = [
@@ -96,43 +148,55 @@
     hint.value = hintList[current.value - 1];
   };
 
-  const date = new Date();
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
+  const warnMessage = ref([]);
   const formData = ref({
-    month: `${year}-${month.toString().padStart(2, '0')}`,
+    month: '',
   });
   const uploadFile = (option: RequestOption) => {
     loading.value = true;
     const { onSuccess, onError, fileItem } = option;
+    const requestId = crypto.randomUUID().replace('-', '');
     getUserInfo().then(() => {
       const submitFromData = new FormData();
       submitFromData.append('file', fileItem.file as File);
-      submitFromData.append('yeah', formData.value.month.split('-')[0]);
-      submitFromData.append('month', formData.value.month.split('-')[1]);
+      if (formData.value.month !== '') {
+        submitFromData.append('yeah', formData.value.month.split('-')[0]);
+        submitFromData.append('month', formData.value.month.split('-')[1]);
+      }
+      submitFromData.append('requestId', requestId);
       excelHandle(submitFromData)
         .then((res) => {
-          const fileNameArray =
-            res.headers['content-disposition'].match(/fileName=(.*)/);
-          if (!fileNameArray) {
-            throw new Error('系统出现错误');
-          }
-          const fileName = fileNameArray[1];
-          const blob = new Blob([res.data], {
-            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          getWarnMessage({ requestId }).then((resp: any) => {
+            if (resp.data.notWarn) {
+              const fileNameArray =
+                res.headers['content-disposition'].match(/fileName=(.*)/);
+              if (!fileNameArray) {
+                throw new Error('系统出现错误');
+              }
+              const fileName = fileNameArray[1];
+              debugger;
+              const blob = new Blob([res.data], {
+                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+              });
+              const a = document.createElement('a');
+              const URL = window.URL || window.webkitURL;
+              const herf = URL.createObjectURL(blob);
+              a.href = herf;
+              a.download = decodeURI(fileName);
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              window.URL.revokeObjectURL(herf);
+              Message.success('文件处理成功!处理好的文件已经为您自动下载');
+              loading.value = false;
+              onSuccess();
+            } else {
+              loading.value = false;
+              warnMessage.value = resp.data.warnMessage;
+              onError();
+              visible.value = true;
+            }
           });
-          const a = document.createElement('a');
-          const URL = window.URL || window.webkitURL;
-          const herf = URL.createObjectURL(blob);
-          a.href = herf;
-          a.download = decodeURI(fileName);
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          window.URL.revokeObjectURL(herf);
-          Message.success('文件处理成功!处理好的文件已经为您自动下载');
-          loading.value = false;
-          onSuccess();
         })
         .catch((error) => {
           Message.error(error);
@@ -140,6 +204,10 @@
         });
     });
     return { onSuccess, onError };
+  };
+
+  const handleBeforeOk = (done: any) => {
+    done();
   };
 </script>
 

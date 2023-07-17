@@ -14,3 +14,9 @@ export function excelHandle(data: FormData) {
     data,
   });
 }
+
+export function getWarnMessage(params: any) {
+  return axios.get<any>('/api/data_statistics/warn_message', {
+    params,
+  });
+}
