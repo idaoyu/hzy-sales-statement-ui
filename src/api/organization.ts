@@ -20,3 +20,11 @@ export function deleteOrganization(id: number) {
 export function addOrganization(data: any) {
   return axios.post<any>('/api/organization', data);
 }
+
+export async function getOne(id: any) {
+  return axios.get<any>(`/api/organization/${id}`);
+}
+
+export async function changeLog(id: any) {
+  return axios.get<any>(`/api/organization/change_log/${id}`);
+}

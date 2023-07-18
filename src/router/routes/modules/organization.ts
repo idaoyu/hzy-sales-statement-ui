@@ -22,6 +22,17 @@ const DASHBOARD: AppRouteRecordRaw = {
         roles: ['user', 'admin'],
       },
     },
+    {
+      path: 'update',
+      name: 'update',
+      component: () => import('@/views/organization/update/index.vue'),
+      meta: {
+        requiresAuth: true,
+        hideInMenu: true,
+        noAffix: true,
+        roles: ['user', 'admin'],
+      },
+    },
   ],
 };
 

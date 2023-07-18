@@ -136,7 +136,10 @@
               <a-table-column title="操作"
                 ><template #cell="{ record }">
                   <a-space>
-                    <a-button @click="updateOrganization">修改</a-button>
+                    <a-button
+                      @click="updateOrganization(record.id, record.type)"
+                      >修改</a-button
+                    >
                     <a-popconfirm
                       content="确定要删除这条记录吗？"
                       @ok="delectOrganization(record)"
@@ -209,6 +212,7 @@
     addOrganization,
   } from '@/api/organization';
   import Message from '@arco-design/web-vue/es/message';
+  import router from '@/router';
 
   const pageNo = ref(1);
   const pageSize = ref(10);
@@ -264,12 +268,12 @@
     doListProduct();
   };
 
-  const updateOrganization = () => {
-    // const updateOrganization = (record: any) => {
-    Message.warning({
-      content: '暂不支持修改操作',
-      duration: 5 * 1000,
-    });
+  const updateOrganization = (id: number, type: string) => {
+    if (type === '分销商') {
+      Message.warning('不支持修改类型为"分销商"的机构');
+      return;
+    }
+    router.push({ path: '/organization/update', query: { id } });
   };
   const delectOrganization = (record: any) => {
     deleteOrganization(record.id).then((res) => {
