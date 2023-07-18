@@ -144,10 +144,10 @@
     >
       <a-form :model="sectionForm">
         <a-form-item field="name" label="Name">
-          <a-input v-model="sectionForm.name" />
+          <a-input />
         </a-form-item>
         <a-form-item field="post" label="Post">
-          <a-select v-model="sectionForm.post">
+          <a-select>
             <a-option value="post1">Post1</a-option>
             <a-option value="post2">Post2</a-option>
             <a-option value="post3">Post3</a-option>
