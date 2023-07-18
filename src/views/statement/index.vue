@@ -156,7 +156,6 @@
     loading.value = true;
     const { onSuccess, onError, fileItem } = option;
     const requestId = crypto.randomUUID().replace(/-/g, '');
-    debugger;
     getUserInfo().then(() => {
       const submitFromData = new FormData();
       submitFromData.append('file', fileItem.file as File);
@@ -175,7 +174,6 @@
                 throw new Error('系统出现错误');
               }
               const fileName = fileNameArray[1];
-              debugger;
               const blob = new Blob([res.data], {
                 type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
               });
