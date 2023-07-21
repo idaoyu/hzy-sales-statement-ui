@@ -38,7 +38,7 @@ axios.interceptors.request.use(
 // add response interceptors
 axios.interceptors.response.use(
   (response: AxiosResponse<HttpResponse>) => {
-    if (response.headers['content-type'].indexOf('application/json') === -1) {
+    if (response.data instanceof Blob) {
       return response;
     }
     const res = response.data;
@@ -53,10 +53,10 @@ axios.interceptors.response.use(
         Modal.error({
           title: '登陆状态过期',
           content: '您的登陆状态已过期，请重新登陆',
+          maskClosable: false,
           okText: '重新登陆',
           async onOk() {
             const userStore = useUserStore();
-
             await userStore.logout();
             window.location.reload();
           },

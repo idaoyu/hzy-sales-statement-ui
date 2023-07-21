@@ -122,7 +122,8 @@
   import { RequestOption } from '@arco-design/web-vue/es/upload';
   import { ref } from 'vue';
   import { excelHandle, getWarnMessage } from '@/api/statistics';
-  import { getUserInfo } from '@/api/user';
+  import { Modal } from '@arco-design/web-vue';
+  import { useUserStore } from '@/store';
 
   const loading = ref(false);
 
@@ -152,56 +153,90 @@
   const formData = ref({
     month: '',
   });
+
+  const checkDownloadConditions = (res: any) => {
+    if (res.data instanceof Blob && res.data.type === 'application/json') {
+      const fileReader = new FileReader();
+      fileReader.readAsText(res.data, 'utf-8');
+      fileReader.onload = () => {
+        const { result } = fileReader;
+        const { code, message } = JSON.parse(result as string);
+        if ([10002].includes(code)) {
+          Modal.error({
+            title: '登陆状态过期',
+            content: '您的登陆状态已过期，请重新登陆',
+            okText: '重新登陆',
+            maskClosable: false,
+            async onOk() {
+              const userStore = useUserStore();
+              await userStore.logout();
+              window.location.reload();
+            },
+          });
+        }
+        Message.error(message || '导出文件失败');
+      };
+      return false;
+    }
+    return true;
+  };
+
+  const downloadFile = (res: any) => {
+    const fileNameArray =
+      res.headers['content-disposition'].match(/fileName=(.*)/);
+    if (!fileNameArray) {
+      throw new Error('系统出现错误');
+    }
+    const fileName = fileNameArray[1];
+    const blob = new Blob([res.data], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    });
+    const a = document.createElement('a');
+    const URL = window.URL || window.webkitURL;
+    const herf = URL.createObjectURL(blob);
+    a.href = herf;
+    a.download = decodeURI(fileName);
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(herf);
+    Message.success('文件处理成功!处理好的文件已经为您自动下载');
+  };
+
   const uploadFile = (option: RequestOption) => {
     loading.value = true;
     const { onSuccess, onError, fileItem } = option;
     const requestId = crypto.randomUUID().replace(/-/g, '');
-    getUserInfo().then(() => {
-      const submitFromData = new FormData();
-      submitFromData.append('file', fileItem.file as File);
-      if (formData.value.month !== '') {
-        submitFromData.append('yeah', formData.value.month.split('-')[0]);
-        submitFromData.append('month', formData.value.month.split('-')[1]);
-      }
-      submitFromData.append('requestId', requestId);
-      excelHandle(submitFromData)
-        .then((res) => {
-          getWarnMessage({ requestId }).then((resp: any) => {
-            if (resp.data.notWarn) {
-              const fileNameArray =
-                res.headers['content-disposition'].match(/fileName=(.*)/);
-              if (!fileNameArray) {
-                throw new Error('系统出现错误');
-              }
-              const fileName = fileNameArray[1];
-              const blob = new Blob([res.data], {
-                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-              });
-              const a = document.createElement('a');
-              const URL = window.URL || window.webkitURL;
-              const herf = URL.createObjectURL(blob);
-              a.href = herf;
-              a.download = decodeURI(fileName);
-              document.body.appendChild(a);
-              a.click();
-              document.body.removeChild(a);
-              window.URL.revokeObjectURL(herf);
-              Message.success('文件处理成功!处理好的文件已经为您自动下载');
-              loading.value = false;
-              onSuccess();
-            } else {
-              loading.value = false;
-              warnMessage.value = resp.data.warnMessage;
-              onError();
-              visible.value = true;
-            }
-          });
-        })
-        .catch((error) => {
-          Message.error(error);
-          onError();
+
+    const submitFromData = new FormData();
+    submitFromData.append('file', fileItem.file as File);
+    if (formData.value.month !== '') {
+      submitFromData.append('yeah', formData.value.month.split('-')[0]);
+      submitFromData.append('month', formData.value.month.split('-')[1]);
+    }
+    submitFromData.append('requestId', requestId);
+    excelHandle(submitFromData)
+      .then((res) => {
+        const success = checkDownloadConditions(res);
+        if (!success) {
+          return;
+        }
+        getWarnMessage({ requestId }).then((warnResp: any) => {
+          if (!warnResp.data.notWarn) {
+            loading.value = false;
+            warnMessage.value = warnResp.data.warnMessage;
+            onError();
+            visible.value = true;
+          }
+          downloadFile(res);
+          loading.value = false;
+          onSuccess();
         });
-    });
+      })
+      .catch((error) => {
+        Message.error(error);
+        onError();
+      });
     return { onSuccess, onError };
   };
 
