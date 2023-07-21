@@ -49,7 +49,10 @@ axios.interceptors.response.use(
         duration: 5 * 1000,
       });
       // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
-      if ([10002].includes(res.code)) {
+      if (
+        [10002].includes(res.code) &&
+        response.config.url !== '/api/user/info'
+      ) {
         Modal.error({
           title: '登陆状态过期',
           content: '您的登陆状态已过期，请重新登陆',

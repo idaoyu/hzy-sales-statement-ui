@@ -1,6 +1,10 @@
 <template>
   <div class="content">
-    <a-spin :loading="loading" tip="文件处理中请稍后" dot>
+    <a-spin :loading="loading" dot>
+      <template #tip>
+        文件处理中请稍后<br />
+        大约需要1～3分钟
+      </template>
       <a-space direction="vertical" fill :size="15">
         <a-row>
           <a-col :span="24">
