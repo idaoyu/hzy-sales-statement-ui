@@ -6,7 +6,7 @@ export default {
   'workplace.order.pendingRenewal': '待续费订单',
   'workplace.onlineContent': '当前月总销售额',
   'workplace.putIn': '当前月总净利润',
-  'workplace.newDay': '较上月增长',
+  'workplace.newDay': '销售额较上月增长',
   'workplace.newFromYesterday': '活跃机构数量',
   'workplace.minute': '分钟',
   'workplace.docs': '帮助文档',

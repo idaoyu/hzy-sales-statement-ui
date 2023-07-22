@@ -9,8 +9,9 @@
         >
         <a-col :span="4"
           ><a-month-picker
-            v-model="dashboardStore.getMonth"
+            v-model="month"
             style="width: 200px"
+            @change="change"
         /></a-col>
       </a-row>
     </a-col>
@@ -19,7 +20,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed } from 'vue';
+  import { computed, ref } from 'vue';
   import { useUserStore, useDashboardStore } from '@/store';
 
   const userStore = useUserStore();
@@ -29,6 +30,10 @@
       name: userStore.nickname,
     };
   });
+  const month = ref(dashboardStore.getMonth);
+  const change = (dateString: any) => {
+    dashboardStore.setMonth(dateString);
+  };
 </script>
 
 <style scoped lang="less">

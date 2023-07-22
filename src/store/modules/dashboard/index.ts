@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
-import { BannerDTO, Dashboard } from './types';
+import { get } from '@/api/dashboard';
+import { Dashboard } from './types';
 
 const useDashboardStore = defineStore('dashboard', {
   state: (): Dashboard => ({
@@ -17,10 +18,16 @@ const useDashboardStore = defineStore('dashboard', {
   },
 
   actions: {
+    setMonth(month: any) {
+      this.$state.month = month;
+      get({ month }).then((res) => {
+        this.$state = res.data;
+      });
+    },
     setData(data: Dashboard) {
       this.$state = data;
     },
-    async getBannerDTO() {
+    getBannerDTO() {
       const store = useDashboardStore();
       return store.bannerDTO;
     },
