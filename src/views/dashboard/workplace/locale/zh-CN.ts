@@ -27,7 +27,7 @@ export default {
   'workplace.allProject': '所有项目',
   'workplace.loadMore': '加载更多',
   'workplace.viewMore': '查看更多',
-  'workplace.contentData': '销售数据',
+  'workplace.contentData': '月度看板',
   'workplace.popularContent': '热门商品',
   'workplace.popularContent.text': '文本',
   'workplace.popularContent.image': '图片',

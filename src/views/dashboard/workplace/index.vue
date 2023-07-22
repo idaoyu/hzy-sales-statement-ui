@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div v-if="loadding" class="left-side">
+    <div class="left-side">
       <div class="panel">
         <Banner />
         <DataPanel />

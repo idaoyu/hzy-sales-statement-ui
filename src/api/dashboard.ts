@@ -11,6 +11,16 @@ export interface DashboardRequest {
   month: string;
 }
 
+export interface LineChart {
+  saleroom: number;
+  netProfit: number;
+  activeCustomers: number;
+}
+
 export function get(params: any) {
   return axios.get<Dashboard>('/api/dashboard/get', { params });
+}
+
+export function getLineChart() {
+  return axios.get<LineChart[]>('/api/dashboard/line_chart');
 }
