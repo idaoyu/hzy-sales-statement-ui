@@ -13,7 +13,7 @@
         </a-avatar>
         <a-statistic
           :title="$t('workplace.onlineContent')"
-          :value="373.5"
+          :value="saleroom"
           :precision="1"
           :value-from="0"
           animation
@@ -38,7 +38,7 @@
         </a-avatar>
         <a-statistic
           :title="$t('workplace.putIn')"
-          :value="368"
+          :value="netProfit"
           :value-from="0"
           animation
           show-group-separator
@@ -62,7 +62,7 @@
         </a-avatar>
         <a-statistic
           :title="$t('workplace.newDay')"
-          :value="8874"
+          :value="salesChange"
           :value-from="0"
           animation
           show-group-separator
@@ -87,12 +87,11 @@
         </a-avatar>
         <a-statistic
           :title="$t('workplace.newFromYesterday')"
-          :value="2.8"
-          :precision="1"
+          :value="activeCustomers"
           :value-from="0"
           animation
         >
-          <template #suffix> % <icon-caret-up class="up-icon" /> </template>
+          <template #suffix> 家 </template>
         </a-statistic>
       </a-space>
     </a-grid-item>
@@ -102,7 +101,23 @@
   </a-grid>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+  import { useDashboardStore } from '@/store';
+  import { ref } from 'vue';
+
+  const store = useDashboardStore();
+  const saleroom = ref(0.0);
+  const netProfit = ref(0.0);
+  const salesChange = ref(0.0);
+  const activeCustomers = ref(0);
+  store.getBannerDTO().then((res) => {
+    saleroom.value = res && res.saleroom ? res.saleroom : 0.0;
+    netProfit.value = res && res.netProfit ? res.netProfit : 0.0;
+    salesChange.value = res && res.salesChange ? res.salesChange : 0.0;
+    activeCustomers.value =
+      res && res.activeCustomers ? res.activeCustomers : 0;
+  });
+</script>
 
 <style lang="less" scoped>
   .arco-grid.panel {

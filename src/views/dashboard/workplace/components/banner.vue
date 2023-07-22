@@ -8,7 +8,9 @@
           </a-typography-title></a-col
         >
         <a-col :span="4"
-          ><a-month-picker v-model="month" style="width: 200px"
+          ><a-month-picker
+            v-model="dashboardStore.getMonth"
+            style="width: 200px"
         /></a-col>
       </a-row>
     </a-col>
@@ -17,18 +19,16 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, ref } from 'vue';
-  import { useUserStore } from '@/store';
-  import { dateFormat } from '@/utils/date';
+  import { computed } from 'vue';
+  import { useUserStore, useDashboardStore } from '@/store';
 
   const userStore = useUserStore();
+  const dashboardStore = useDashboardStore();
   const userInfo = computed(() => {
     return {
       name: userStore.nickname,
     };
   });
-
-  const month = ref(dateFormat(new Date(), 'YYYY_MM'));
 </script>
 
 <style scoped lang="less">

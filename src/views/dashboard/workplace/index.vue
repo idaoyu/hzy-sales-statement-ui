@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="left-side">
+    <div v-if="loadding" class="left-side">
       <div class="panel">
         <Banner />
         <DataPanel />
@@ -42,6 +42,10 @@
 </template>
 
 <script lang="ts" setup>
+  import { get } from '@/api/dashboard';
+  import { dateFormat } from '@/utils/date';
+  import useDashboardStore from '@/store/modules/dashboard';
+  import { ref } from 'vue';
   import Banner from './components/banner.vue';
   import DataPanel from './components/data-panel.vue';
   import ContentChart from './components/content-chart.vue';
@@ -52,6 +56,18 @@
   import Announcement from './components/announcement.vue';
   import Carousel from './components/carousel.vue';
   import Docs from './components/docs.vue';
+
+  const store = useDashboardStore();
+  const loadding = ref(false);
+
+  const init = () => {
+    const month = dateFormat(new Date(), 'YYYY-MM');
+    get({ month }).then((res) => {
+      store.setData(res.data);
+      loadding.value = true;
+    });
+  };
+  init();
 </script>
 
 <script lang="ts">
