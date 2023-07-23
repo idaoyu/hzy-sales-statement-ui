@@ -11,10 +11,23 @@ export interface DashboardRequest {
   month: string;
 }
 
+export interface StatisticalData {
+  no: number;
+  name: string;
+  quantityOfShipment: number;
+  scale: number;
+}
+
 export function get(params: any) {
   return axios.get<Dashboard>('/api/dashboard/get', { params });
 }
 
 export function getLineChart() {
   return axios.get<ContentDataRecord[]>('/api/dashboard/net_profit');
+}
+
+export function getStatisticalData(params: any) {
+  return axios.get<StatisticalData[]>('/api/dashboard/statistical_data', {
+    params,
+  });
 }

@@ -43,9 +43,9 @@
 
 <script lang="ts" setup>
   import { get } from '@/api/dashboard';
-  import { dateFormat } from '@/utils/date';
   import useDashboardStore from '@/store/modules/dashboard';
   import { ref } from 'vue';
+  import dayjs from 'dayjs';
   import Banner from './components/banner.vue';
   import DataPanel from './components/data-panel.vue';
   import ContentChart from './components/content-chart.vue';
@@ -61,7 +61,7 @@
   const loadding = ref(false);
 
   const init = () => {
-    const month = dateFormat(new Date(), 'YYYY-MM');
+    const month = dayjs(`${new Date()}`).subtract(1, 'month').format('YYYY-MM');
     get({ month }).then((res) => {
       store.setData(res.data);
       loadding.value = true;
