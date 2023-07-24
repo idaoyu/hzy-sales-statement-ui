@@ -10,6 +10,13 @@
       <template #title>
         {{ $t('workplace.categoriesPercent') }}
       </template>
+      <template #extra>
+        <a-month-picker
+          v-model="localDate"
+          style="width: 200px"
+          @change="change"
+        />
+      </template>
       <Chart height="310px" :option="chartOption" />
     </a-card>
   </a-spin>
@@ -18,15 +25,24 @@
 <script lang="ts" setup>
   import useLoading from '@/hooks/loading';
   import useChartOption from '@/hooks/chart-option';
+  import { ref } from 'vue';
+  import dayjs from 'dayjs';
+  import { responsibleForShipmentAnalysis } from '@/api/dashboard';
 
-  const { loading } = useLoading();
+  const localDate = ref(
+    dayjs(`${new Date()}`).subtract(1, 'month').format('YYYY-MM')
+  );
+  const { loading, setLoading } = useLoading();
+  const keyList = ref<string[]>([]);
+  const valueList = ref<any[]>([]);
+  const totalPrice = ref<number>(0);
   const { chartOption } = useChartOption((isDark) => {
     // echarts support https://echarts.apache.org/zh/theme-builder.html
     // It's not used here
     return {
       legend: {
         left: 'center',
-        data: ['纯文本', '图文类', '视频类'],
+        data: keyList.value,
         bottom: 0,
         icon: 'circle',
         itemWidth: 8,
@@ -40,6 +56,7 @@
       tooltip: {
         show: true,
         trigger: 'item',
+        formatter: '{b} 销售额:{c}元 占比:{d}%',
       },
       graphic: {
         elements: [
@@ -48,7 +65,7 @@
             left: 'center',
             top: '40%',
             style: {
-              text: '内容量',
+              text: '总出货量',
               textAlign: 'center',
               fill: isDark ? '#ffffffb3' : '#4E5969',
               fontSize: 14,
@@ -59,7 +76,7 @@
             left: 'center',
             top: '50%',
             style: {
-              text: '928,531',
+              text: `${totalPrice.value}元`,
               textAlign: 'center',
               fill: isDark ? '#ffffffb3' : '#1D2129',
               fontSize: 16,
@@ -82,33 +99,38 @@
             borderColor: isDark ? '#232324' : '#fff',
             borderWidth: 1,
           },
-          data: [
-            {
-              value: [148564],
-              name: '纯文本',
-              itemStyle: {
-                color: isDark ? '#3D72F6' : '#249EFF',
-              },
-            },
-            {
-              value: [334271],
-              name: '图文类',
-              itemStyle: {
-                color: isDark ? '#A079DC' : '#313CA9',
-              },
-            },
-            {
-              value: [445694],
-              name: '视频类',
-              itemStyle: {
-                color: isDark ? '#6CAAF5' : '#21CCFF',
-              },
-            },
-          ],
+          data: valueList.value,
         },
       ],
     };
   });
+  const fetchData = async (paramDate: string) => {
+    try {
+      setLoading(true);
+      const { data } = await responsibleForShipmentAnalysis({
+        date: paramDate,
+      });
+      keyList.value = [];
+      valueList.value = [];
+      data.keyList.forEach((el: any) => keyList.value.push(el));
+      data.list.forEach((el: any) =>
+        valueList.value.push({
+          value: [el.value],
+          name: el.key,
+        })
+      );
+      totalPrice.value = data.totalPrice;
+    } catch (err) {
+      // you can report use errorHandler or other
+    } finally {
+      setLoading(false);
+    }
+  };
+  fetchData(localDate.value);
+
+  const change = (date: any) => {
+    fetchData(date);
+  };
 </script>
 
 <style scoped lang="less"></style>
