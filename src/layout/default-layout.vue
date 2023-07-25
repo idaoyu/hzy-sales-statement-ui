@@ -13,7 +13,7 @@
           :collapsed="collapsed"
           :collapsible="true"
           :width="menuWidth"
-          :style="{ paddingTop: navbar ? '60px' : '' }"
+          :style="{ paddingTop: navbar ? '95px' : '' }"
           :hide-trigger="true"
           @collapse="setCollapsed"
         >

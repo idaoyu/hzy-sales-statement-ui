@@ -56,7 +56,7 @@
       tooltip: {
         show: true,
         trigger: 'item',
-        formatter: '{b} 销售额:{c}元 占比:{d}%',
+        formatter: '{b}: 销售额: {c}w 元 占比:{d}%',
       },
       graphic: {
         elements: [
@@ -76,7 +76,7 @@
             left: 'center',
             top: '50%',
             style: {
-              text: `${totalPrice.value}元`,
+              text: `${totalPrice.value.toFixed(2)}w 元`,
               textAlign: 'center',
               fill: isDark ? '#ffffffb3' : '#1D2129',
               fontSize: 16,
@@ -115,7 +115,7 @@
       data.keyList.forEach((el: any) => keyList.value.push(el));
       data.list.forEach((el: any) =>
         valueList.value.push({
-          value: [el.value],
+          value: [el.value.toFixed(2)],
           name: el.key,
         })
       );
