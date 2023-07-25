@@ -88,10 +88,6 @@
       </li>
     </ul>
   </div>
-  <a-alert type="warning" banner center
-    >该系统还在不断迭代调整中,数据或操作结果可能与实际有一定差异,请注意核对。如有问题请及时通过
-    issues 反馈</a-alert
-  >
 </template>
 
 <script lang="ts" setup>
