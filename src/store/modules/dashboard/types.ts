@@ -1,11 +1,10 @@
 export interface BannerDTO {
-  saleroom?: number;
-  netProfit?: number;
-  salesChange?: number;
-  activeCustomers?: number;
+  totalSales?: number;
+  grossProfit?: number;
+  salesGrowth?: number;
+  numberActiveInstitutions?: number;
 }
 
 export interface Dashboard {
-  month?: string;
-  bannerDTO?: BannerDTO;
+  date?: string;
 }

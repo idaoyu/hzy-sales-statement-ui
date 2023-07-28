@@ -1,4 +1,4 @@
-import { Dashboard } from '@/store/modules/dashboard/types';
+import { BannerDTO } from '@/store/modules/dashboard/types';
 import axios from 'axios';
 
 // 以后删掉
@@ -24,8 +24,8 @@ export interface ResponsibleForShipmentAnalysisDTO {
   totalPrice: number;
 }
 
-export function get(params: any) {
-  return axios.get<Dashboard>('/api/dashboard/get', { params });
+export function getBannerData(params: any) {
+  return axios.get<BannerDTO>('/api/dashboard/general_situation', { params });
 }
 
 export function getLineChart() {

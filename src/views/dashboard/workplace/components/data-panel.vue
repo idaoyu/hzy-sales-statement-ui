@@ -13,7 +13,7 @@
         </a-avatar>
         <a-statistic
           :title="$t('workplace.onlineContent')"
-          :value="data.saleroom"
+          :value="data.totalSales"
           :precision="1"
           :value-from="0"
           animation
@@ -38,7 +38,7 @@
         </a-avatar>
         <a-statistic
           :title="$t('workplace.putIn')"
-          :value="data.netProfit"
+          :value="data.grossProfit"
           :value-from="0"
           animation
           show-group-separator
@@ -62,7 +62,7 @@
         </a-avatar>
         <a-statistic
           :title="$t('workplace.newDay')"
-          :value="data.salesChange"
+          :value="data.salesGrowth"
           :value-from="0"
           animation
           show-group-separator
@@ -87,7 +87,7 @@
         </a-avatar>
         <a-statistic
           :title="$t('workplace.newFromYesterday')"
-          :value="data.activeCustomers"
+          :value="data.numberActiveInstitutions"
           :value-from="0"
           animation
         >
@@ -102,19 +102,26 @@
 </template>
 
 <script lang="ts" setup>
+  import { getBannerData } from '@/api/dashboard';
   import { useDashboardStore } from '@/store';
-  import { computed } from 'vue';
+  import { watch, computed, ref } from 'vue';
 
   const store = useDashboardStore();
+  const lastDate = computed(() => store.date);
+  const data = ref<any>({});
 
-  const data = computed(() => {
-    return {
-      saleroom: store.dashboard.bannerDTO?.saleroom,
-      netProfit: store.dashboard.bannerDTO?.netProfit,
-      salesChange: store.dashboard.bannerDTO?.salesChange,
-      activeCustomers: store.dashboard.bannerDTO?.activeCustomers,
-    };
+  const getData = async (params: any) => {
+    const resp = await getBannerData(params);
+    data.value = resp.data;
+  };
+
+  watch(lastDate, (newValue) => {
+    if (!newValue) {
+      return;
+    }
+    getData({ date: newValue });
   });
+  getData({ date: lastDate.value });
 </script>
 
 <style lang="less" scoped>

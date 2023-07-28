@@ -1,35 +1,29 @@
 import { defineStore } from 'pinia';
-import { get } from '@/api/dashboard';
+import dayjs from 'dayjs';
 import { Dashboard } from './types';
 
 const useDashboardStore = defineStore('dashboard', {
   state: (): Dashboard => ({
-    month: undefined,
-    bannerDTO: undefined,
+    date: undefined,
   }),
 
   getters: {
     dashboard(state: Dashboard): Dashboard {
       return { ...state };
     },
-    getMonth: (state) => {
-      return state.month;
-    },
   },
 
   actions: {
-    setMonth(month: any) {
-      this.$state.month = month;
-      get({ month }).then((res) => {
-        this.$state = res.data;
+    setDate(date: string) {
+      this.$patch({
+        date,
       });
     },
-    setData(data: Dashboard) {
-      this.$state = data;
-    },
-    getBannerDTO() {
-      const store = useDashboardStore();
-      return store.bannerDTO;
+    async getLastDate() {
+      const date = dayjs(`${new Date()}`)
+        .subtract(1, 'month')
+        .format('YYYY-MM');
+      this.setDate(date);
     },
   },
 });

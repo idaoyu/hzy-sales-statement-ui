@@ -8,13 +8,6 @@
       <template #title>
         {{ $t('workplace.popularContent') }}
       </template>
-      <template #extra>
-        <a-month-picker
-          v-model="localDate"
-          style="width: 200px"
-          @change="dateChange"
-        />
-      </template>
       <a-space direction="vertical" :size="10" fill>
         <a-radio-group
           v-model:model-value="type"
@@ -77,23 +70,25 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
+  import { computed, ref, watch } from 'vue';
   import useLoading from '@/hooks/loading';
   import { StatisticalData, getStatisticalData } from '@/api/dashboard';
-  import dayjs from 'dayjs';
+  import useDashboardStore from '@/store/modules/dashboard';
 
+  const store = useDashboardStore();
+  const lastDate = computed(() => store.date);
   const type = ref('product');
-  const localDate = ref(
-    dayjs(`${new Date()}`).subtract(1, 'month').format('YYYY-MM')
-  );
   const { loading, setLoading } = useLoading();
   const renderList = ref<StatisticalData[]>();
-  const fetchData = async (contentType: string, paramDate: string) => {
+  const fetchData = async (
+    contentType: string,
+    localDate: string | undefined
+  ) => {
     try {
       setLoading(true);
       const { data } = await getStatisticalData({
         type: contentType,
-        date: paramDate,
+        date: localDate,
       });
       renderList.value = data;
     } catch (err) {
@@ -103,12 +98,15 @@
     }
   };
   const typeChange = (contentType: string) => {
-    fetchData(contentType, localDate.value);
+    fetchData(contentType, lastDate.value);
   };
-  const dateChange = () => {
-    fetchData(type.value, localDate.value);
-  };
-  fetchData('product', localDate.value);
+  watch(lastDate, (newValue) => {
+    if (!newValue) {
+      return;
+    }
+    fetchData('product', lastDate.value);
+  });
+  fetchData('product', lastDate.value);
 </script>
 
 <style scoped lang="less">

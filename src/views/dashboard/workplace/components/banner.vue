@@ -9,7 +9,7 @@
         >
         <a-col :span="4"
           ><a-month-picker
-            v-model="data.month"
+            v-model="dashboardInfo.date"
             style="width: 200px"
             @change="change"
         /></a-col>
@@ -31,13 +31,13 @@
     };
   });
 
-  const data = computed(() => {
+  const dashboardInfo = computed(() => {
     return {
-      month: dashboardStore.getMonth,
+      date: dashboardStore.date,
     };
   });
   const change = (dateString: any) => {
-    dashboardStore.setMonth(dateString);
+    dashboardStore.setDate(dateString);
   };
 </script>
 

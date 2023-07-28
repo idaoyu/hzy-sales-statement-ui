@@ -10,13 +10,6 @@
       <template #title>
         {{ $t('workplace.categoriesPercent') }}
       </template>
-      <template #extra>
-        <a-month-picker
-          v-model="localDate"
-          style="width: 200px"
-          @change="change"
-        />
-      </template>
       <Chart height="310px" :option="chartOption" />
     </a-card>
   </a-spin>
@@ -25,13 +18,10 @@
 <script lang="ts" setup>
   import useLoading from '@/hooks/loading';
   import useChartOption from '@/hooks/chart-option';
-  import { ref } from 'vue';
-  import dayjs from 'dayjs';
+  import { computed, ref, watch } from 'vue';
   import { responsibleForShipmentAnalysis } from '@/api/dashboard';
+  import useDashboardStore from '@/store/modules/dashboard';
 
-  const localDate = ref(
-    dayjs(`${new Date()}`).subtract(1, 'month').format('YYYY-MM')
-  );
   const { loading, setLoading } = useLoading();
   const keyList = ref<string[]>([]);
   const valueList = ref<any[]>([]);
@@ -104,7 +94,11 @@
       ],
     };
   });
-  const fetchData = async (paramDate: string) => {
+
+  const store = useDashboardStore();
+  const lastDate = computed(() => store.date);
+
+  const fetchData = async (paramDate: string | undefined) => {
     try {
       setLoading(true);
       const { data } = await responsibleForShipmentAnalysis({
@@ -126,11 +120,14 @@
       setLoading(false);
     }
   };
-  fetchData(localDate.value);
 
-  const change = (date: any) => {
-    fetchData(date);
-  };
+  watch(lastDate, (newValue) => {
+    if (!newValue) {
+      return;
+    }
+    fetchData(newValue);
+  });
+  fetchData(lastDate.value);
 </script>
 
 <style scoped lang="less"></style>
