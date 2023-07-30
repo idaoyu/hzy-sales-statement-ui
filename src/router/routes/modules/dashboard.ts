@@ -22,6 +22,17 @@ const DASHBOARD: AppRouteRecordRaw = {
         roles: ['*'],
       },
     },
+    {
+      path: 'grossProfitAnalysis',
+      name: 'GrossProfitAnalysis',
+      component: () =>
+        import('@/views/dashboard/grossProfitAnalysis/index.vue'),
+      meta: {
+        locale: 'menu.dashboard.grossProfitAnalysis',
+        requiresAuth: true,
+        roles: ['*'],
+      },
+    },
   ],
 };
 
