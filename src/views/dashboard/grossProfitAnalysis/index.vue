@@ -96,21 +96,7 @@
             data-index="totalSales"
           >
             <template #cell="{ record }">
-              <a-statistic
-                :value="record.totalSales"
-                show-group-separator
-                :value-from="0"
-                animation
-                :value-style="
-                  record.salesGrowth
-                    ? { color: '#FF0000' }
-                    : { color: '#0fbf60' }
-                "
-              >
-                <template #prefix>
-                  <icon-arrow-up v-if="record.salesGrowth" />
-                  <icon-arrow-down v-else />
-                </template>
+              <a-statistic :value="record.totalSales" show-group-separator>
                 <template #suffix> 元</template>
               </a-statistic>
             </template>
@@ -122,19 +108,14 @@
           >
             <template #cell="{ record }">
               <a-statistic
-                :value="record.rateSalesChange"
+                :value="Math.abs(record.rateSalesChange)"
                 show-group-separator
-                :value-from="0"
-                animation
-                :value-style="
-                  record.salesGrowth
-                    ? { color: '#FF0000' }
-                    : { color: '#0fbf60' }
-                "
+                :value-style="colorHandle(record.rateSalesChange)"
               >
                 <template #prefix>
-                  <icon-arrow-up v-if="record.salesGrowth" />
-                  <icon-arrow-down v-else />
+                  <icon-arrow-up v-if="record.rateSalesChange > 0" />
+                  <icon-arrow-down v-else-if="record.rateSalesChange < 0" />
+                  <icon-swap v-else />
                 </template>
                 <template #suffix>
                   % 上月:{{ record.totalSalesLastMonth }} 元</template
@@ -148,21 +129,7 @@
             data-index="grossProfit"
           >
             <template #cell="{ record }">
-              <a-statistic
-                :value="record.grossProfit"
-                show-group-separator
-                :value-from="0"
-                animation
-                :value-style="
-                  record.grossProfitGrowth
-                    ? { color: '#FF0000' }
-                    : { color: '#0fbf60' }
-                "
-              >
-                <template #prefix>
-                  <icon-arrow-up v-if="record.grossProfitGrowth" />
-                  <icon-arrow-down v-else />
-                </template>
+              <a-statistic :value="record.grossProfit" show-group-separator>
                 <template #suffix> 元</template>
               </a-statistic>
             </template>
@@ -174,18 +141,15 @@
           >
             <template #cell="{ record }">
               <a-statistic
-                :value-from="0"
-                animation
-                :value="record.rateChangeGrossProfit"
-                :value-style="
-                  record.grossProfitGrowth
-                    ? { color: '#FF0000' }
-                    : { color: '#0fbf60' }
-                "
+                :value="Math.abs(record.rateChangeGrossProfit)"
+                :value-style="colorHandle(record.rateChangeGrossProfit)"
               >
                 <template #prefix>
-                  <icon-arrow-up v-if="record.grossProfitGrowth" />
-                  <icon-arrow-down v-else />
+                  <icon-arrow-up v-if="record.rateChangeGrossProfit > 0" />
+                  <icon-arrow-down
+                    v-else-if="record.rateChangeGrossProfit < 0"
+                  />
+                  <icon-swap v-else />
                 </template>
                 <template #suffix>
                   % 上月:{{ record.grossProfitLastMonth }} 元
@@ -239,6 +203,16 @@
   const organizationType = ref(['药店', '分销商']);
   const total = ref(0);
 
+  const colorHandle = (value: number) => {
+    if (value > 0) {
+      return { color: '#FF0000' };
+    }
+    if (value === 0) {
+      return { color: '#FFAA33' };
+    }
+    return { color: '#0fbf60' };
+  };
+
   const checkboxChangeHandle = (value: any[]) => {
     let result = value.join(',');
     if (value.length < 2) {
@@ -252,6 +226,7 @@
     try {
       const { data: resultData } = await netProfitAnalysis(params);
       tableData.value = resultData.records;
+      total.value = resultData.total;
     } catch (err) {
       // you can report use errorHandler or other
     } finally {
