@@ -51,7 +51,7 @@
             >
               <template #cell="{ record }">
                 <div class="increases-cell">
-                  <span>{{ record.quantityOfShipment.toFixed(2) }}k 元</span>
+                  <span>{{ record.quantityOfShipment.toFixed(2) }}w 元</span>
                 </div>
               </template>
             </a-table-column>
