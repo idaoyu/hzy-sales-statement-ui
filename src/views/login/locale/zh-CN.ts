@@ -1,5 +1,5 @@
 export default {
-  'login.form.title': '登陆 合智源 数据管理系统',
+  'login.form.title': '登陆 合智源 数据分析平台',
   'login.form.userName.errMsg': '用户名不能为空',
   'login.form.password.errMsg': '密码不能为空',
   'login.form.login.errMsg': '登录出错，请刷新重试',

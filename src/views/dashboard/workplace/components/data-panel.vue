@@ -95,6 +95,7 @@
           :value="Math.abs(data.profitGrowth)"
           :value-from="0"
           animation
+          show-group-separator
           :value-style="colorHandle(data.profitGrowth)"
         >
           <template #prefix>

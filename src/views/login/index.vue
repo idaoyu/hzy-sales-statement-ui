@@ -3,10 +3,10 @@
     <div class="logo">
       <img
         alt="logo"
-        src="https://img1.imgtp.com/2023/07/10/9zBzL3do.png"
+        src="https://public.idaoyu.cn/public/images/9zBzL3do.png"
         style="width: 33px; height: 33px"
       />
-      <div class="logo-text">合智源数据管理系统</div>
+      <div class="logo-text">合智源数据分析平台</div>
     </div>
     <LoginBanner />
     <div class="content">
