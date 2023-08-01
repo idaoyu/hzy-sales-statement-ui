@@ -8,7 +8,7 @@
         <a-avatar :size="54" class="col-avatar">
           <img
             alt="avatar"
-            src="https://public.idaoyu.cn/public/images/订单.png"
+            src="https://public.idaoyu.cn/public/images/余额.png"
           />
         </a-avatar>
         <a-statistic
@@ -33,7 +33,7 @@
         <a-avatar :size="54" class="col-avatar">
           <img
             alt="avatar"
-            src="https://public.idaoyu.cn/public/images/图表柱图.png"
+            src="https://public.idaoyu.cn/public/images/股票.png"
           />
         </a-avatar>
         <a-statistic
@@ -62,7 +62,7 @@
         <a-avatar :size="54" class="col-avatar">
           <img
             alt="avatar"
-            src="https://public.idaoyu.cn/public/images/人民币.png"
+            src="https://public.idaoyu.cn/public/images/资产.png"
           />
         </a-avatar>
         <a-statistic
@@ -87,7 +87,7 @@
         <a-avatar :size="54" class="col-avatar">
           <img
             alt="avatar"
-            src="https://public.idaoyu.cn/public/images/图表柱图.png"
+            src="https://public.idaoyu.cn/public/images/概率.png"
           />
         </a-avatar>
         <a-statistic
@@ -115,7 +115,7 @@
         <a-avatar :size="54" class="col-avatar">
           <img
             alt="avatar"
-            src="https://public.idaoyu.cn/public/images/稳定可靠.png"
+            src="https://public.idaoyu.cn/public/images/更多应用.png"
           />
         </a-avatar>
         <a-statistic
