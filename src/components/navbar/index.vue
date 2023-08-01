@@ -4,14 +4,14 @@
       <a-space>
         <img
           alt="logo"
-          src="https://img1.imgtp.com/2023/07/10/9zBzL3do.png"
+          src="https://public.idaoyu.cn/public/images/9zBzL3do.png"
           style="width: 33px; height: 33px"
         />
         <a-typography-title
           :style="{ margin: 0, fontSize: '18px' }"
           :heading="5"
         >
-          合智源数据管理系统
+          合智源数据分析平台
         </a-typography-title>
         <icon-menu-fold
           v-if="!topMenu && appStore.device === 'mobile'"

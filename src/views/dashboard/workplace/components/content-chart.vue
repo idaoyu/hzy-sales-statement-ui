@@ -113,9 +113,7 @@
           const list = params as ToolTipFormatterParams[];
           return `<div>
             <p class="tooltip-title">${list[0].axisValueLabel}</p>
-            <div class="content-panel"><span>净利润</span><span class="tooltip-value">${(
-              Number(list[0].value) * 10000
-            ).toLocaleString()}元</span></div>
+            <div class="content-panel"><span>净利润</span><span class="tooltip-value">${list[0].value} 万元</span></div>
           </div>`;
         },
         className: 'echarts-tooltip-diy',
