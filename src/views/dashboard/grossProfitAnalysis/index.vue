@@ -17,8 +17,13 @@
                 ></a-input></a-form-item
             ></a-col>
             <a-col :span="6">
-              <a-form-item field="date" label="月份">
-                <a-month-picker v-model="formData.date" style="width: 200px" />
+              <a-form-item field="date" label="时间">
+                <a-range-picker
+                  v-model="date"
+                  mode="month"
+                  style="width: 254px; marginbottom: 20px"
+                  @change="changeDateHandle"
+                />
               </a-form-item>
             </a-col>
             <a-col :span="6">
@@ -33,16 +38,6 @@
               ></a-col
             >
             <a-col :span="6">
-              <a-form-item field="type" label="排序依据">
-                <a-radio-group v-model="formData.sortingField">
-                  <a-radio value="1">毛利润</a-radio>
-                  <a-radio value="2">毛利润变化幅度</a-radio>
-                </a-radio-group></a-form-item
-              ></a-col
-            >
-          </a-row>
-          <a-row justify="center">
-            <a-col :span="6">
               <a-form-item field="type" label="排序规则">
                 <a-radio-group v-model="formData.sortingRule">
                   <a-radio value="1">从小到大</a-radio>
@@ -50,6 +45,20 @@
                 </a-radio-group></a-form-item
               ></a-col
             >
+          </a-row>
+          <a-row justify="center">
+            <a-col :span="11">
+              <a-form-item field="type" label="排序依据">
+                <a-radio-group v-model="formData.sortingField">
+                  <a-radio value="1">销售额</a-radio>
+                  <a-radio value="2">销售额变化率</a-radio>
+                  <a-radio value="3">毛利润</a-radio>
+                  <a-radio value="4">毛利润变化幅度</a-radio>
+                  <a-radio value="5">时间</a-radio>
+                </a-radio-group></a-form-item
+              ></a-col
+            >
+
             <a-col :span="2">
               <a-button html-type="submit" type="primary">确认</a-button>
             </a-col>
@@ -64,6 +73,11 @@
         :loading="loading"
       >
         <template #columns>
+          <a-table-column align="center" title="时间" data-index="name">
+            <template #cell="{ record }"
+              >{{ dayjs(record.date).format('YYYY年MM月') }}
+            </template>
+          </a-table-column>
           <a-table-column
             align="center"
             title="机构名字"
@@ -160,8 +174,14 @@
           <a-table-column title="操作" align="center">
             <template #cell>
               <a-space
-                ><a-button size="small">出货明细</a-button
-                ><a-button size="small" type="primary"
+                ><a-button
+                  size="small"
+                  @click="Message.warning('暂未支持出货明细分析')"
+                  >出货明细</a-button
+                ><a-button
+                  size="small"
+                  type="primary"
+                  @click="Message.warning('暂未支持活跃趋势分析')"
                   >活跃趋势</a-button
                 ></a-space
               >
@@ -192,10 +212,17 @@
     TableData,
     netProfitAnalysis,
   } from '@/api/report';
+  import { Message } from '@arco-design/web-vue';
   import dayjs from 'dayjs';
   import { ref } from 'vue';
 
   const formData = ref<NetProfitAnalysisParams>({});
+
+  const changeDateHandle = (value: any) => {
+    formData.value.date = value.join(',');
+  };
+
+  const date = ref<string[]>([]);
 
   const tableData = ref<TableData[]>([]);
 
@@ -243,9 +270,11 @@
   };
 
   const init = () => {
-    const localDate = dayjs().add(-1, 'month').format('YYYY-MM');
+    const startDate = dayjs().add(-2, 'month').format('YYYY-MM');
+    const endDate = dayjs().add(-1, 'month').format('YYYY-MM');
+    date.value = [startDate, endDate];
     formData.value = {
-      date: localDate,
+      date: `${startDate},${endDate}`,
       type: '药店,分销商',
       sortingField: '1',
       sortingRule: '2',
