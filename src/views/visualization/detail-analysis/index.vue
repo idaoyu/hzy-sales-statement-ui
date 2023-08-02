@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <a-page-header title="返回" :subtitle="name" @back="back"> </a-page-header>
+    <a-page-header title="返回" @back="back"> </a-page-header>
     <a-space direction="vertical" :size="12" fill>
       <a-space direction="vertical" :size="16" fill>
         <div class="space-unit">
@@ -20,9 +20,7 @@
             </a-grid-item>
           </a-grid>
         </div>
-        <div>
-          <!-- <ContentPeriodAnalysis /> -->
-        </div>
+        <div> </div>
       </a-space>
     </a-space>
   </div>
@@ -31,13 +29,13 @@
 <script lang="ts" setup>
   import { useRoute, useRouter } from 'vue-router';
   import PublicOpinion from './components/public-opinion.vue';
-  // import ContentPeriodAnalysis from './components/content-period-analysis.vue';
   import ContentPublishRatio from './components/content-publish-ratio.vue';
   import PopularAuthor from './components/popular-author.vue';
 
   const route = useRoute();
   const router = useRouter();
   const { name } = route.query;
+  console.log(name);
 
   const back = () => {
     router.push({ path: '/dashboard/grossProfitAnalysis' });
