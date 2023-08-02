@@ -158,7 +158,7 @@
     month: '',
   });
 
-  const checkDownloadConditions = (res: any) => {
+  const checkDownloadConditions = (res: any, requestId: string) => {
     if (res.data instanceof Blob && res.data.type === 'application/json') {
       const fileReader = new FileReader();
       fileReader.readAsText(res.data, 'utf-8');
@@ -177,8 +177,17 @@
               window.location.reload();
             },
           });
+        } else if (message === '请配置缺失数据后重新上传') {
+          Message.error(message);
+          getWarnMessage({ requestId }).then((warnResp: any) => {
+            if (!warnResp.data.notWarn) {
+              warnMessage.value = warnResp.data.warnMessage;
+              visible.value = true;
+            }
+          });
+        } else {
+          Message.error(message || '导出文件失败');
         }
-        Message.error(message || '导出文件失败');
       };
       return false;
     }
@@ -221,25 +230,20 @@
     submitFromData.append('requestId', requestId);
     excelHandle(submitFromData)
       .then((res) => {
-        const success = checkDownloadConditions(res);
+        const success = checkDownloadConditions(res, requestId);
         if (!success) {
+          onError();
           return;
         }
-        getWarnMessage({ requestId }).then((warnResp: any) => {
-          if (!warnResp.data.notWarn) {
-            loading.value = false;
-            warnMessage.value = warnResp.data.warnMessage;
-            onError();
-            visible.value = true;
-          }
-          downloadFile(res);
-          loading.value = false;
-          onSuccess();
-        });
+        downloadFile(res);
+        onSuccess();
       })
-      .catch((error) => {
-        Message.error(error);
+      .catch(() => {
+        Message.error('系统出现错误,请刷新后重试');
         onError();
+      })
+      .finally(() => {
+        loading.value = false;
       });
     return { onSuccess, onError };
   };

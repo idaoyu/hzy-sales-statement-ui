@@ -33,6 +33,18 @@ const DASHBOARD: AppRouteRecordRaw = {
         roles: ['*'],
       },
     },
+    {
+      path: 'detailAnalysis',
+      name: 'DetailAnalysis',
+      component: () =>
+        import('@/views/visualization/detail-analysis/index.vue'),
+      meta: {
+        requiresAuth: true,
+        hideInMenu: true,
+        noAffix: true,
+        roles: ['*'],
+      },
+    },
   ],
 };
 

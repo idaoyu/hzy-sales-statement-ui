@@ -172,17 +172,13 @@
             >
           </a-table-column>
           <a-table-column title="操作" align="center">
-            <template #cell>
+            <template #cell="{ record }">
               <a-space
                 ><a-button
                   size="small"
-                  @click="Message.warning('暂未支持出货明细分析')"
-                  >出货明细</a-button
-                ><a-button
-                  size="small"
                   type="primary"
-                  @click="Message.warning('暂未支持活跃趋势分析')"
-                  >活跃趋势</a-button
+                  @click="toDataAnalysis(record.name)"
+                  >数据分析</a-button
                 ></a-space
               >
             </template>
@@ -212,7 +208,7 @@
     TableData,
     netProfitAnalysis,
   } from '@/api/report';
-  import { Message } from '@arco-design/web-vue';
+  import router from '@/router';
   import dayjs from 'dayjs';
   import { ref } from 'vue';
 
@@ -229,6 +225,10 @@
   const loading = ref(false);
   const organizationType = ref(['药店', '分销商']);
   const total = ref(0);
+
+  const toDataAnalysis = (name: string) => {
+    router.push({ path: '/dashboard/detailAnalysis', query: { name } });
+  };
 
   const colorHandle = (value: number) => {
     if (value > 0) {
