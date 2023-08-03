@@ -14,9 +14,12 @@
             <a-typography-text type="secondary" class="label">
               较上月
             </a-typography-text>
-            <a-typography-text type="danger">
-              {{ renderData.growth }}
-              <icon-arrow-rise />
+            <a-typography-text :type="colorHandle(renderData.change)">
+              {{ Math.abs(renderData.change) }}{{ renderData.scale }}
+              {{ renderData.unit }}
+              <icon-arrow-rise v-if="renderData.change > 0" />
+              <icon-arrow-fall v-else-if="renderData.change < 0" />
+              <icon-swap v-else />
             </a-typography-text>
           </div>
         </div>
@@ -37,9 +40,25 @@
     PublicOpinionAnalysisRes,
   } from '@/api/visualization';
   import useChartOption from '@/hooks/chart-option';
+  import { ToolTipFormatterParams } from '@/types/echarts';
+
+  const colorHandle = (value: number) => {
+    if (value > 0) {
+      return 'danger';
+    }
+    if (value === 0) {
+      return 'warning';
+    }
+    return 'success';
+  };
 
   const barChartOptionsFactory = () => {
-    const data = ref<any>([]);
+    const data = ref<any>({
+      x: [],
+      y: [],
+      name: '',
+      unit: '',
+    });
     const { chartOption } = useChartOption(() => {
       return {
         grid: {
@@ -51,6 +70,7 @@
         xAxis: {
           type: 'category',
           show: false,
+          data: data.value.x,
         },
         yAxis: {
           show: false,
@@ -58,10 +78,18 @@
         tooltip: {
           show: true,
           trigger: 'axis',
+          formatter(params) {
+            const list = params as ToolTipFormatterParams[];
+            return `<div>
+            <p class="tooltip-title">${list[0].axisValueLabel}</p>
+            <div class="content-panel"><span>净利润</span><span class="tooltip-value">${list[0].value} ${data.value.unit}</span></div>
+          </div>`;
+          },
+          className: 'echarts-tooltip-diy',
         },
         series: {
-          name: 'total',
-          data,
+          name: data.value.name,
+          data: data.value.y,
           type: 'bar',
           barWidth: 7,
           itemStyle: {
@@ -77,7 +105,12 @@
   };
 
   const lineChartOptionsFactory = () => {
-    const data = ref<number[][]>([[], []]);
+    const data = ref<any>({
+      x: [],
+      y: [],
+      name: '',
+      unit: '',
+    });
     const { chartOption } = useChartOption(() => {
       return {
         grid: {
@@ -89,6 +122,7 @@
         xAxis: {
           type: 'category',
           show: false,
+          data: data.value.x,
         },
         yAxis: {
           show: false,
@@ -96,74 +130,27 @@
         tooltip: {
           show: true,
           trigger: 'axis',
+          formatter(params) {
+            const list = params as ToolTipFormatterParams[];
+            return `<div>
+            <p class="tooltip-title">${list[0].axisValueLabel}</p>
+            <div class="content-panel"><span>净利润</span><span class="tooltip-value">${list[0].value} ${data.value.unit}</span></div>
+          </div>`;
+          },
+          className: 'echarts-tooltip-diy',
         },
         series: [
           {
-            name: '2001',
-            data: data.value[0],
+            name: data.value.name,
+            data: data.value.y,
             type: 'line',
             showSymbol: false,
             smooth: true,
             lineStyle: {
               color: '#165DFF',
               width: 3,
-            },
-          },
-          {
-            name: '2002',
-            data: data.value[1],
-            type: 'line',
-            showSymbol: false,
-            smooth: true,
-            lineStyle: {
-              color: '#6AA1FF',
-              width: 3,
               type: 'dashed',
             },
-          },
-        ],
-      };
-    });
-    return {
-      data,
-      chartOption,
-    };
-  };
-
-  const pieChartOptionsFactory = () => {
-    const data = ref<any>([]);
-    const { chartOption } = useChartOption(() => {
-      return {
-        grid: {
-          left: 0,
-          right: 0,
-          top: 0,
-          bottom: 0,
-        },
-        legend: {
-          show: true,
-          top: 'center',
-          right: '0',
-          orient: 'vertical',
-          icon: 'circle',
-          itemWidth: 6,
-          itemHeight: 6,
-          textStyle: {
-            color: '#4E5969',
-          },
-        },
-        tooltip: {
-          show: true,
-        },
-        series: [
-          {
-            name: '总计',
-            type: 'pie',
-            radius: ['50%', '70%'],
-            label: {
-              show: false,
-            },
-            data,
           },
         ],
       };
@@ -187,6 +174,14 @@
       type: String,
       default: '',
     },
+    date: {
+      type: String,
+      default: '',
+    },
+    name: {
+      type: String,
+      default: '',
+    },
     cardStyle: {
       type: Object as PropType<CSSProperties>,
       default: () => {
@@ -200,43 +195,39 @@
     lineChartOptionsFactory();
   const { chartOption: barChartOption, data: barData } =
     barChartOptionsFactory();
-  const { chartOption: pieChartOption, data: pieData } =
-    pieChartOptionsFactory();
   const renderData = ref<PublicOpinionAnalysisRes>({
     count: 0,
-    growth: 0,
-    chartData: [],
+    change: 0,
+    result: [],
+    name: '',
+    unit: '',
+    scale: '',
   });
   const chartOption = ref({});
   const fetchData = async (params: PublicOpinionAnalysis) => {
     try {
       const { data } = await queryPublicOpinionAnalysis(params);
       renderData.value = data;
-      const { chartData } = data;
+      const { result } = data;
       if (props.chartType === 'bar') {
-        chartData.forEach((el, idx) => {
-          barData.value.push({
+        result.forEach((el, idx) => {
+          barData.value.x.push(el.x);
+          barData.value.y.push({
             value: el.y,
-            itemStyle: {
-              color: idx % 2 ? '#2CAB40' : '#86DF6C',
-            },
+            itemStyle: { color: idx % 2 ? '#2CAB40' : '#86DF6C' },
           });
         });
+        barData.value.name = data.name;
+        barData.value.unit = data.unit;
         chartOption.value = barChartOption.value;
       } else if (props.chartType === 'line') {
-        chartData.forEach((el) => {
-          if (el.name === '2021') {
-            lineData.value[0].push(el.y);
-          } else {
-            lineData.value[1].push(el.y);
-          }
+        result.forEach((el) => {
+          lineData.value.x.push(el.x);
+          lineData.value.y.push(el.y);
         });
+        lineData.value.name = data.name;
+        lineData.value.unit = data.unit;
         chartOption.value = lineChartOption.value;
-      } else {
-        chartData.forEach((el) => {
-          pieData.value.push(el);
-        });
-        chartOption.value = pieChartOption.value;
       }
     } catch (err) {
       // you can report use errorHandler or other
@@ -244,7 +235,7 @@
       setLoading(false);
     }
   };
-  fetchData({ quota: props.quota });
+  fetchData({ type: props.quota, name: props.name, date: props.date });
 </script>
 
 <style scoped lang="less">
@@ -285,7 +276,6 @@
   }
 
   .label {
-    padding-right: 8px;
     font-size: 12px;
   }
 </style>

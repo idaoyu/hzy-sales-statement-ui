@@ -7,7 +7,9 @@ export interface ChartDataRecord {
   name: string;
 }
 export interface DataChainGrowth {
-  quota: string;
+  type: string;
+  name: string;
+  date: string;
 }
 
 export interface DataChainGrowthRes {
@@ -38,7 +40,7 @@ export function queryPopularAuthor() {
 export interface ContentPublishRecord {
   x: string[];
   y: number[];
-  name: string;
+  itemStyle: { color: string };
 }
 
 export function queryContentPublish() {
@@ -50,18 +52,22 @@ export function queryContentPeriodAnalysis() {
 }
 
 export interface PublicOpinionAnalysis {
-  quota: string;
+  type: string;
+  name: string;
+  date: string;
 }
 export interface PublicOpinionAnalysisRes {
   count: number;
-  growth: number;
-  chartData: ChartDataRecord[];
+  change: number;
+  result: ChartDataRecord[];
+  name: string;
+  unit: string;
+  scale: string;
 }
 export function queryPublicOpinionAnalysis(data: DataChainGrowth) {
-  return axios.post<PublicOpinionAnalysisRes>(
-    '/api/public-opinion-analysis',
-    data
-  );
+  return axios.get<PublicOpinionAnalysisRes>('/api/report/data_analysis', {
+    params: data,
+  });
 }
 export interface DataOverviewRes {
   xAxis: string[];

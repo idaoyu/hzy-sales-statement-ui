@@ -4,7 +4,7 @@
     <a-space direction="vertical" :size="12" fill>
       <a-space direction="vertical" :size="16" fill>
         <div class="space-unit">
-          <PublicOpinion />
+          <PublicOpinion :name="(name as string)" />
         </div>
         <div>
           <a-grid :cols="24" :col-gap="16" :row-gap="16">
@@ -35,7 +35,6 @@
   const route = useRoute();
   const router = useRouter();
   const { name } = route.query;
-  console.log(name);
 
   const back = () => {
     router.push({ path: '/dashboard/grossProfitAnalysis' });

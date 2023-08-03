@@ -8,8 +8,10 @@
       <a-grid-item :span="{ xs: 12, sm: 12, md: 12, lg: 12, xl: 6, xxl: 6 }">
         <ChainItem
           title="销售额趋势"
-          quota="visitors"
+          quota="salesVolume"
           chart-type="line"
+          :date="date"
+          :name="props.name"
           :card-style="{
             background: isDark
               ? 'linear-gradient(180deg, #284991 0%, #122B62 100%)'
@@ -20,8 +22,10 @@
       <a-grid-item :span="{ xs: 12, sm: 12, md: 12, lg: 12, xl: 6, xxl: 6 }">
         <ChainItem
           title="利润率趋势"
-          quota="published"
+          quota="profitRate"
           chart-type="bar"
+          :date="date"
+          :name="props.name"
           :card-style="{
             background: isDark
               ? ' linear-gradient(180deg, #3D492E 0%, #263827 100%)'
@@ -32,8 +36,10 @@
       <a-grid-item :span="{ xs: 12, sm: 12, md: 12, lg: 12, xl: 6, xxl: 6 }">
         <ChainItem
           title="毛利润趋势"
-          quota="comment"
+          quota="grossProfit"
           chart-type="line"
+          :date="date"
+          :name="props.name"
           :card-style="{
             background: isDark
               ? 'linear-gradient(180deg, #294B94 0%, #0F275C 100%)'
@@ -44,8 +50,10 @@
       <a-grid-item :span="{ xs: 12, sm: 12, md: 12, lg: 12, xl: 6, xxl: 6 }">
         <ChainItem
           title="出货量趋势"
-          quota="share"
-          chart-type="pie"
+          quota="quantityShipment"
+          chart-type="line"
+          :date="date"
+          :name="props.name"
           :card-style="{
             background: isDark
               ? 'linear-gradient(180deg, #312565 0%, #201936 100%)'
@@ -54,12 +62,25 @@
         />
       </a-grid-item>
     </a-grid>
+    <template #extra>
+      <a-month-picker :model-value="date" style="width: 200px" />
+    </template>
   </a-card>
 </template>
 
 <script lang="ts" setup>
+  import { ref } from 'vue';
   import useThemes from '@/hooks/themes';
+  import dayjs from 'dayjs';
   import ChainItem from './chain-item.vue';
 
   const { isDark } = useThemes();
+  const date = ref(dayjs().add(-1, 'month').format('YYYY-MM'));
+
+  const props = defineProps({
+    name: {
+      type: String,
+      default: '',
+    },
+  });
 </script>
