@@ -7,7 +7,7 @@
     <a-grid :cols="24" :col-gap="12" :row-gap="12">
       <a-grid-item :span="{ xs: 12, sm: 12, md: 12, lg: 12, xl: 6, xxl: 6 }">
         <ChainItem
-          title="销售额趋势"
+          title="总销售额"
           quota="salesVolume"
           chart-type="line"
           :date="date"
@@ -21,7 +21,7 @@
       </a-grid-item>
       <a-grid-item :span="{ xs: 12, sm: 12, md: 12, lg: 12, xl: 6, xxl: 6 }">
         <ChainItem
-          title="利润率趋势"
+          title="总毛利率"
           quota="profitRate"
           chart-type="bar"
           :date="date"
@@ -35,7 +35,7 @@
       </a-grid-item>
       <a-grid-item :span="{ xs: 12, sm: 12, md: 12, lg: 12, xl: 6, xxl: 6 }">
         <ChainItem
-          title="毛利润趋势"
+          title="总毛利润"
           quota="grossProfit"
           chart-type="line"
           :date="date"
@@ -49,9 +49,9 @@
       </a-grid-item>
       <a-grid-item :span="{ xs: 12, sm: 12, md: 12, lg: 12, xl: 6, xxl: 6 }">
         <ChainItem
-          title="出货量趋势"
+          title="当月出货量"
           quota="quantityShipment"
-          chart-type="line"
+          chart-type="pie"
           :date="date"
           :name="props.name"
           :card-style="{
@@ -63,7 +63,11 @@
       </a-grid-item>
     </a-grid>
     <template #extra>
-      <a-month-picker :model-value="date" style="width: 200px" />
+      <a-month-picker
+        :model-value="date"
+        style="width: 200px"
+        @change="dateChangeHandle"
+      />
     </template>
   </a-card>
 </template>
@@ -76,6 +80,10 @@
 
   const { isDark } = useThemes();
   const date = ref(dayjs().add(-1, 'month').format('YYYY-MM'));
+
+  const dateChangeHandle = (dateString: string) => {
+    date.value = dateString;
+  };
 
   const props = defineProps({
     name: {
