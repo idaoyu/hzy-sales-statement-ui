@@ -1,13 +1,10 @@
 <template>
   <a-card
     class="general-card"
-    :title="$t('workplace.announcement')"
+    title="公告栏"
     :header-style="{ paddingBottom: '0' }"
     :body-style="{ padding: '15px 20px 13px 20px' }"
   >
-    <template #extra>
-      <a-link>{{ $t('workplace.viewMore') }}</a-link>
-    </template>
     <div>
       <div v-for="(item, idx) in list" :key="idx" class="item">
         <a-tag :color="item.type" size="small">{{ item.label }}</a-tag>
@@ -22,29 +19,24 @@
 <script lang="ts" setup>
   const list = [
     {
-      type: 'orangered',
-      label: '活动',
-      content: '内容最新优惠活动',
+      type: '#f53f3f',
+      label: 'BUG',
+      content: '导出销售表格失败',
     },
     {
-      type: 'cyan',
-      label: '消息',
-      content: '新增内容尚未通过审核，详情请点击查看。',
+      type: '#ff7d00',
+      label: '开发中',
+      content: '机构分析',
     },
     {
-      type: 'blue',
-      label: '通知',
-      content: '当前产品试用期即将结束，如需续费请点击查看。',
+      type: '#7bc616',
+      label: '已完成',
+      content: '销售数据表格整理功能',
     },
     {
-      type: 'blue',
-      label: '通知',
-      content: '1月新系统升级计划通知',
-    },
-    {
-      type: 'cyan',
-      label: '消息',
-      content: '新增内容已经通过审核，详情请点击查看。',
+      type: '#7bc616',
+      label: '已完成',
+      content: '净利润分析功能',
     },
   ];
 </script>

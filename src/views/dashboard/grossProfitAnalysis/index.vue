@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <a-space direction="vertical" fill :size="15">
-      <a-card title="净利润分析">
+      <a-card title="销售额/利润分析">
         <a-form
           :model="formData"
           :label-col-props="{ span: 5 }"

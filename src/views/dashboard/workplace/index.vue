@@ -24,7 +24,6 @@
         <a-grid-item :span="24">
           <div class="panel moduler-wrap">
             <QuickOperation />
-            <RecentlyVisited />
           </div>
         </a-grid-item>
         <a-grid-item class="panel" :span="24">

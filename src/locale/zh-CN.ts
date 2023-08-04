@@ -27,7 +27,7 @@ export default {
   'menu.product.cost': '进价管理',
   'menu.organization': '机构管理',
   'menu.organization.manage': '机构负责人管理',
-  'menu.dashboard.grossProfitAnalysis': '净利润分析',
+  'menu.dashboard.grossProfitAnalysis': '数据可视化分析',
   ...localeSettings,
   ...localeMessageBox,
   ...localeLogin,
