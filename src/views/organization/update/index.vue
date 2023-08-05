@@ -43,10 +43,12 @@
             <a-row>
               <a-col :span="6">
                 <a-form-item field="name" label="负责人">
-                  <a-tag
-                    v-for="item in formData.principalNameList"
-                    :key="item"
-                    >{{ item }}</a-tag
+                  <a-space>
+                    <a-tag
+                      v-for="item in formData.principalNameList"
+                      :key="item"
+                      >{{ item }}</a-tag
+                    ></a-space
                   >
                 </a-form-item>
               </a-col>
@@ -142,21 +144,32 @@
     </a-space>
     <a-modal
       v-model:visible="visible"
-      title="Modal Form"
+      title="修改机构负责人"
       @cancel="handleCancel"
       @before-ok="handleBeforeOk"
     >
       <a-form :model="sectionForm">
-        <a-form-item field="name" label="Name">
-          <a-input />
+        <a-form-item field="responsibleType" label="负责类型">
+          <a-radio-group v-model:model-value="sectionForm.responsibleType">
+            <a-radio value="单人负责">单人负责</a-radio>
+            <a-radio value="多人负责">多人负责</a-radio>
+          </a-radio-group>
         </a-form-item>
-        <a-form-item field="post" label="Post">
-          <a-select>
-            <a-option value="post1">Post1</a-option>
-            <a-option value="post2">Post2</a-option>
-            <a-option value="post3">Post3</a-option>
-            <a-option value="post4">Post4</a-option>
-          </a-select>
+        <a-form-item field="principalId" label="负责人">
+          <a-checkbox-group v-model:model-value="sectionForm.principalId">
+            <a-checkbox value="1">李梦</a-checkbox>
+            <a-checkbox value="2">张怡静</a-checkbox>
+            <a-checkbox value="3">张艳霞</a-checkbox>
+          </a-checkbox-group>
+        </a-form-item>
+        <a-form-item field="date" label="生效时间">
+          <a-date-picker
+            v-model="sectionForm.date"
+            style="width: 220px; margin: 0 24px 24px 0"
+            show-time
+            :time-picker-props="{ defaultValue: '09:09:06' }"
+            format="YYYY-MM-DD HH:mm:ss"
+          />
         </a-form-item>
       </a-form>
     </a-modal>
@@ -166,9 +179,9 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
-  import { getOne, changeLog } from '@/api/organization';
-  import { Message } from '@arco-design/web-vue';
+  import { getOne, changeLog, update } from '@/api/organization';
   import { dateFormat } from '@/utils/date';
+  import { Message } from '@arco-design/web-vue';
 
   const route = useRoute();
   const router = useRouter();
@@ -205,18 +218,32 @@
   };
   init();
 
-  const updateCurrentPrincipal = () => {
-    Message.warning('暂时不支持修改机构当前负责人');
-    // visible.value = true;
-  };
+  const sectionForm = ref<any>({});
 
-  const sectionForm = ref({});
+  const updateCurrentPrincipal = () => {
+    sectionForm.value = {
+      responsibleType: formData.value.responsibleType,
+      principalId: [],
+      date: '',
+    };
+    visible.value = true;
+  };
 
   const handleCancel = () => {
     sectionForm.value = {};
   };
   const handleBeforeOk = (done: any) => {
-    done();
+    update(id, {
+      newValue: {
+        responsibleType: sectionForm.value.responsibleType,
+        principalId: sectionForm.value.principalId.join(','),
+      },
+      effectiveTime: sectionForm.value.date,
+    }).then((resp) => {
+      Message.success(resp.data);
+      init();
+      done();
+    });
   };
 </script>
 

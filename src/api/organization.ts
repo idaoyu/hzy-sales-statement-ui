@@ -9,6 +9,14 @@ export interface GetInfo {
   pageSize: number;
 }
 
+export interface UpdateParams {
+  newValue: {
+    responsibleType: string;
+    principalId: string;
+  };
+  effectiveTime: string;
+}
+
 export function listOrganization(params: GetInfo) {
   return axios.get<any>('/api/organization', { params });
 }
@@ -23,6 +31,10 @@ export function addOrganization(data: any) {
 
 export async function getOne(id: any) {
   return axios.get<any>(`/api/organization/${id}`);
+}
+
+export function update(id: any, params: UpdateParams) {
+  return axios.put<any>(`/api/organization/${id}`, { ...params });
 }
 
 export async function changeLog(id: any) {
