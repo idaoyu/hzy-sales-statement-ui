@@ -14,8 +14,8 @@ const useUserStore = defineStore('user', {
   state: (): UserState => ({
     nickname: undefined,
     headPortrait: undefined,
-    permission: undefined,
-    role: '',
+    permissionList: undefined,
+    roleList: undefined,
   }),
 
   getters: {
@@ -25,12 +25,6 @@ const useUserStore = defineStore('user', {
   },
 
   actions: {
-    switchRoles() {
-      return new Promise((resolve) => {
-        this.role = this.role === 'user' ? 'admin' : 'user';
-        resolve(this.role);
-      });
-    },
     // Set user's information
     setInfo(partial: Partial<UserState>) {
       this.$patch(partial);

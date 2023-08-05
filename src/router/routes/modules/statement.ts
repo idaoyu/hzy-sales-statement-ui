@@ -19,7 +19,7 @@ const DASHBOARD: AppRouteRecordRaw = {
       meta: {
         locale: 'menu.statement.market',
         requiresAuth: true,
-        roles: ['user', 'admin'],
+        roles: ['SuperAdmin', 'UserAdmin', 'Observer'],
       },
     },
   ],

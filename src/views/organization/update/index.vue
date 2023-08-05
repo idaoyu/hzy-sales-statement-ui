@@ -6,7 +6,11 @@
       <a-row>
         <a-card title="机构信息" style="width: 100%" hoverable>
           <template #extra>
-            <a-link @click="updateCurrentPrincipal">修改机构当前负责人</a-link>
+            <a-link
+              v-permission="['organization:update']"
+              @click="updateCurrentPrincipal"
+              >修改机构当前负责人</a-link
+            >
           </template>
           <a-form :model="formData">
             <a-row>

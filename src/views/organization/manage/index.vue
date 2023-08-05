@@ -5,7 +5,11 @@
         <a-col :span="24">
           <a-card title="机构负责人管理" hoverable>
             <template #extra>
-              <a-link @click="visible = true">新增机构</a-link>
+              <a-link
+                v-permission="['organization:add']"
+                @click="visible = true"
+                >新增机构</a-link
+              >
             </template>
             <a-form :model="formData">
               <a-row>
@@ -144,7 +148,9 @@
                       content="确定要删除这条记录吗？"
                       @ok="delectOrganization(record)"
                     >
-                      <a-button>删除</a-button>
+                      <a-button v-permission="['organization:delete']"
+                        >删除</a-button
+                      >
                     </a-popconfirm>
                   </a-space>
                 </template></a-table-column

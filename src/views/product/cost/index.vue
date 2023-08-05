@@ -5,7 +5,11 @@
         <a-col :span="24">
           <a-card title="进价管理" hoverable>
             <template #extra>
-              <a-link @click="openAddProductModal">新增商品</a-link>
+              <a-link
+                v-permission="['product:add']"
+                @click="openAddProductModal"
+                >新增商品</a-link
+              >
             </template>
             <a-form :model="formData">
               <a-row>
@@ -100,12 +104,18 @@
               <a-table-column title="操作"
                 ><template #cell="{ record }">
                   <a-space>
-                    <a-button @click="updateProductInfo(record)">修改</a-button>
+                    <a-button
+                      v-permission="['product:update']"
+                      @click="updateProductInfo(record)"
+                      >修改</a-button
+                    >
                     <a-popconfirm
                       content="确定要删除这条记录吗？"
                       @ok="delectProductInfo(record)"
                     >
-                      <a-button>删除</a-button>
+                      <a-button v-permission="['product:delete']"
+                        >删除</a-button
+                      >
                     </a-popconfirm>
                   </a-space>
                 </template></a-table-column

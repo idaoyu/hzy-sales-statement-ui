@@ -19,7 +19,7 @@ const DASHBOARD: AppRouteRecordRaw = {
       meta: {
         locale: 'menu.organization.manage',
         requiresAuth: true,
-        roles: ['user', 'admin'],
+        roles: ['SuperAdmin', 'UserAdmin', 'Observer'],
       },
     },
     {
@@ -27,10 +27,10 @@ const DASHBOARD: AppRouteRecordRaw = {
       name: 'update',
       component: () => import('@/views/organization/update/index.vue'),
       meta: {
-        requiresAuth: true,
         hideInMenu: true,
         noAffix: true,
-        roles: ['user', 'admin'],
+        requiresAuth: true,
+        roles: ['SuperAdmin', 'UserAdmin', 'Observer'],
       },
     },
   ],

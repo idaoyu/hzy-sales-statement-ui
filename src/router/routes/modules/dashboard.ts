@@ -19,7 +19,7 @@ const DASHBOARD: AppRouteRecordRaw = {
       meta: {
         locale: 'menu.dashboard.workplace',
         requiresAuth: true,
-        roles: ['*'],
+        roles: ['SuperAdmin', 'UserAdmin', 'Observer'],
       },
     },
     {
@@ -30,7 +30,7 @@ const DASHBOARD: AppRouteRecordRaw = {
       meta: {
         locale: 'menu.dashboard.grossProfitAnalysis',
         requiresAuth: true,
-        roles: ['*'],
+        roles: ['SuperAdmin', 'UserAdmin', 'Observer'],
       },
     },
     {
@@ -39,10 +39,10 @@ const DASHBOARD: AppRouteRecordRaw = {
       component: () =>
         import('@/views/visualization/detail-analysis/index.vue'),
       meta: {
-        requiresAuth: true,
         hideInMenu: true,
         noAffix: true,
-        roles: ['*'],
+        requiresAuth: true,
+        roles: ['SuperAdmin', 'UserAdmin', 'Observer'],
       },
     },
   ],
