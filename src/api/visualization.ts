@@ -25,26 +25,40 @@ export function queryDataChainGrowth(data: DataChainGrowth) {
 }
 
 export interface PopularAuthorRes {
-  list: {
-    ranking: number;
-    author: string;
-    contentCount: number;
-    clickCount: number;
-  }[];
+  name: string;
+  price: number;
+  rank: number;
+  quantityOfShipment: number;
 }
 
-export function queryPopularAuthor() {
-  return axios.get<PopularAuthorRes>('/api/popular-author/list');
+export interface HotProductRankListParams {
+  name: string;
+  type: string;
+  date: string;
+}
+
+export interface GrossProfitComparison {
+  name: string;
+  date: string;
+}
+
+export function queryPopularAuthor(params: HotProductRankListParams) {
+  return axios.get<PopularAuthorRes[]>('/api/report/hot_product_rank_list', {
+    params,
+  });
 }
 
 export interface ContentPublishRecord {
+  average: number[];
+  current: number[];
   x: string[];
-  y: number[];
-  itemStyle: { color: string };
 }
 
-export function queryContentPublish() {
-  return axios.get<ContentPublishRecord[]>('/api/content-publish');
+export function queryContentPublish(params: GrossProfitComparison) {
+  return axios.get<ContentPublishRecord>(
+    '/api/report/gross_profit_comparison',
+    { params }
+  );
 }
 
 export function queryContentPeriodAnalysis() {

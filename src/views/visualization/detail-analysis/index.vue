@@ -1,22 +1,26 @@
 <template>
   <div class="container">
-    <a-page-header title="返回" @back="back"> </a-page-header>
+    <a-page-header title="返回" :subtitle="(name as string)" @back="back">
+    </a-page-header>
     <a-space direction="vertical" :size="12" fill>
       <a-space direction="vertical" :size="16" fill>
         <div class="space-unit">
-          <PublicOpinion :name="(name as string)" />
+          <PublicOpinion v-model:date="date" :name="(name as string)" />
         </div>
         <div>
           <a-grid :cols="24" :col-gap="16" :row-gap="16">
             <a-grid-item
               :span="{ xs: 24, sm: 24, md: 24, lg: 24, xl: 16, xxl: 16 }"
             >
-              <ContentPublishRatio />
+              <ContentPublishRatio
+                :date="(date as string)"
+                :name="(name as string)"
+              />
             </a-grid-item>
             <a-grid-item
               :span="{ xs: 24, sm: 24, md: 24, lg: 24, xl: 8, xxl: 8 }"
             >
-              <PopularAuthor />
+              <PopularAuthor v-model:date="date" :name="(name as string)" />
             </a-grid-item>
           </a-grid>
         </div>
@@ -28,6 +32,8 @@
 
 <script lang="ts" setup>
   import { useRoute, useRouter } from 'vue-router';
+  import dayjs from 'dayjs';
+  import { ref } from 'vue';
   import PublicOpinion from './components/public-opinion.vue';
   import ContentPublishRatio from './components/content-publish-ratio.vue';
   import PopularAuthor from './components/popular-author.vue';
@@ -35,6 +41,7 @@
   const route = useRoute();
   const router = useRouter();
   const { name } = route.query;
+  const date = ref(dayjs().add(-1, 'month').format('YYYY-MM'));
 
   const back = () => {
     router.push({ path: '/dashboard/grossProfitAnalysis' });
@@ -49,8 +56,8 @@
 
 <style scoped lang="less">
   .container {
-    padding: 0 20px 20px 20px;
-    margin-bottom: 20px;
+    padding: 0 20px 0 20px;
+    margin-bottom: 8px;
   }
 
   .space-unit {

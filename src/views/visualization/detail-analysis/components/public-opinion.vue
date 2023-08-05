@@ -49,7 +49,7 @@
       </a-grid-item>
       <a-grid-item :span="{ xs: 12, sm: 12, md: 12, lg: 12, xl: 6, xxl: 6 }">
         <ChainItem
-          title="当月出货量"
+          title="当月出货量TOP6"
           quota="quantityShipment"
           chart-type="pie"
           :date="date"
@@ -64,7 +64,7 @@
     </a-grid>
     <template #extra>
       <a-month-picker
-        :model-value="date"
+        :model-value="props.date"
         style="width: 200px"
         @change="dateChangeHandle"
       />
@@ -73,20 +73,22 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
   import useThemes from '@/hooks/themes';
-  import dayjs from 'dayjs';
   import ChainItem from './chain-item.vue';
 
   const { isDark } = useThemes();
-  const date = ref(dayjs().add(-1, 'month').format('YYYY-MM'));
+  const emit = defineEmits(['update:date']);
 
   const dateChangeHandle = (dateString: string) => {
-    date.value = dateString;
+    emit('update:date', dateString);
   };
 
   const props = defineProps({
     name: {
+      type: String,
+      default: '',
+    },
+    date: {
       type: String,
       default: '',
     },

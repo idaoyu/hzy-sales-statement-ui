@@ -1,19 +1,19 @@
 <template>
   <a-spin :loading="loading" style="width: 100%">
     <a-card class="general-card" :header-style="{ paddingBottom: '14px' }">
-      <template #title> 同比毛利润平均值分析 </template>
+      <template #title> 活跃机构平均毛利润同比该机构毛利润 </template>
       <Chart style="width: 100%; height: 347px" :option="chartOption" />
     </a-card>
   </a-spin>
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
+  import { ref, watch } from 'vue';
   import { ToolTipFormatterParams } from '@/types/echarts';
   import useLoading from '@/hooks/loading';
   import {
     queryContentPublish,
-    ContentPublishRecord,
+    GrossProfitComparison,
   } from '@/api/visualization';
   import useChartOption from '@/hooks/chart-option';
 
@@ -30,7 +30,7 @@
       </span>
     </p>
     <span class="tooltip-value">
-      ${Number(el.value).toLocaleString()}
+      ${Number(el.value).toFixed(2).toLocaleString()} 元
     </span>
   </div>`
       )
@@ -41,7 +41,6 @@
   const xAxis = ref<string[]>([]);
   const textChartsData = ref<number[]>([]);
   const imgChartsData = ref<number[]>([]);
-  const videoChartsData = ref<number[]>([]);
   const { chartOption } = useChartOption((isDark) => {
     return {
       grid: {
@@ -105,7 +104,7 @@
       },
       series: [
         {
-          name: '平均毛利润',
+          name: '平均',
           data: textChartsData.value,
           stack: 'one',
           type: 'bar',
@@ -113,7 +112,7 @@
           color: isDark ? '#4A7FF7' : '#246EFF',
         },
         {
-          name: '本机构毛利润',
+          name: '本机构',
           data: imgChartsData.value,
           stack: 'one',
           type: 'bar',
@@ -122,26 +121,37 @@
       ],
     };
   });
-  const fetchData = async () => {
+  const props = defineProps({
+    name: {
+      type: String,
+      default: '',
+    },
+    date: {
+      type: String,
+      default: '',
+    },
+  });
+  const fetchData = async (params: GrossProfitComparison) => {
     setLoading(true);
     try {
-      // const { data: chartData } = await queryContentPublish();
-      // xAxis.value = chartData[0].x;
-      // chartData.forEach((el: ContentPublishRecord) => {
-      //   if (el.name === '纯文本') {
-      //     textChartsData.value = el.y;
-      //   } else if (el.name === '图文类') {
-      //     imgChartsData.value = el.y;
-      //   }
-      //   videoChartsData.value = el.y;
-      // });
+      const { data: chartData } = await queryContentPublish(params);
+      xAxis.value = chartData.x;
+      imgChartsData.value = chartData.current;
+      textChartsData.value = chartData.average;
     } catch (err) {
       // you can report use errorHandler or other
     } finally {
       setLoading(false);
     }
   };
-  fetchData();
+  fetchData({ name: props.name, date: props.date });
+
+  watch(
+    () => props.date,
+    (newValue: string) => {
+      fetchData({ name: props.name, date: newValue });
+    }
+  );
 </script>
 
 <style scoped lang="less"></style>
