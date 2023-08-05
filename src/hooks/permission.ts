@@ -13,13 +13,16 @@ export default function usePermission() {
           .length > 0
       );
     },
-    findFirstPermissionRoute(_routers: any, role = 'admin') {
+    findFirstPermissionRoute(_routers: any, role: string[] = []) {
       const cloneRouters = [..._routers];
       while (cloneRouters.length) {
         const firstElement = cloneRouters.shift();
         if (
           firstElement?.meta?.roles?.find((el: string[]) => {
-            return el.includes('*') || el.includes(role);
+            debugger;
+            return (
+              el.includes('*') || role.filter((x) => el.includes(x)).length > 0
+            );
           })
         )
           return { name: firstElement.name };
