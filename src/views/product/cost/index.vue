@@ -106,7 +106,7 @@
                   <a-space>
                     <a-button
                       v-permission="['product:update']"
-                      @click="updateProductInfo(record)"
+                      @click="updateProduct(record.id)"
                       >修改</a-button
                     >
                     <a-popconfirm
@@ -138,51 +138,14 @@
         />
       </a-row>
     </a-space>
-    <a-modal
-      v-model:visible="visible"
-      :title="operation"
-      :width="600"
-      @cancel="handleCancel"
-      @before-ok="handleBeforeOk"
-    >
-      <a-form :model="modalForm">
-        <a-form-item field="productName" label="商品名字">
-          <a-input
-            v-model="modalForm.productName"
-            allow-clear
-            :disabled="operation === '修改商品'"
-          >
-            <template #prefix> <icon-message /> </template
-          ></a-input>
-        </a-form-item>
-        <a-form-item field="productAliasName" label="商品标签(别名)">
-          <a-input
-            v-model="modalForm.productAliasName"
-            allow-clear
-            :disabled="operation === '修改商品'"
-          >
-            <template #prefix> <icon-tag /> </template
-          ></a-input>
-        </a-form-item>
-        <a-form-item field="costPrice" label="商品价格">
-          <a-input-number v-model="modalForm.costPrice" allow-clear :step="1.0"
-            ><template #prefix> <icon-compass /> </template
-          ></a-input-number>
-        </a-form-item>
-      </a-form>
-    </a-modal>
   </div>
 </template>
 
 <script lang="ts" setup>
   import { ref } from 'vue';
-  import {
-    listProduct,
-    deleteProduct,
-    updateProduct,
-    addProduct,
-  } from '@/api/product';
+  import { listProduct, deleteProduct } from '@/api/product';
   import Message from '@arco-design/web-vue/es/message';
+  import router from '@/router';
 
   const operation = ref('修改商品');
   const visible = ref(false);
@@ -193,11 +156,6 @@
     costPrice: 0.0,
   };
   const modalForm = ref(modalFormInitData);
-
-  const handleCancel = () => {
-    visible.value = false;
-    modalForm.value = modalFormInitData;
-  };
 
   const loading = ref(true);
 
@@ -217,10 +175,8 @@
     listGet();
   };
 
-  const updateProductInfo = (record: any) => {
-    operation.value = '修改商品';
-    modalForm.value = record;
-    visible.value = true;
+  const updateProduct = (id: number) => {
+    router.push({ path: '/product/updateProduct', query: { id } });
   };
   const delectProductInfo = (record: any) => {
     deleteProduct(record.id).then((res) => {
@@ -238,24 +194,6 @@
     formData.value.pageNo = 1;
     formData.value.pageSize = 10;
     listGet();
-  };
-
-  const handleBeforeOk = (done: any) => {
-    const data = modalForm.value;
-    if (operation.value === '修改商品') {
-      updateProduct(data.id, data.costPrice).then((res) => {
-        Message.success(res.data);
-        modalForm.value = modalFormInitData;
-        listGet();
-        done();
-      });
-    } else {
-      addProduct(data).then((res) => {
-        Message.success(res.data);
-        listGet();
-        done();
-      });
-    }
   };
 
   const openAddProductModal = () => {

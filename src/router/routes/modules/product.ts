@@ -22,6 +22,17 @@ const DASHBOARD: AppRouteRecordRaw = {
         roles: ['SuperAdmin', 'UserAdmin', 'Observer'],
       },
     },
+    {
+      path: 'updateProduct',
+      name: 'UpdateProduct',
+      component: () => import('@/views/product/update/index.vue'),
+      meta: {
+        hideInMenu: true,
+        noAffix: true,
+        requiresAuth: true,
+        roles: ['SuperAdmin', 'UserAdmin', 'Observer'],
+      },
+    },
   ],
 };
 

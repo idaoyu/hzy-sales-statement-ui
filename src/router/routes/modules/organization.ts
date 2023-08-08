@@ -23,8 +23,8 @@ const DASHBOARD: AppRouteRecordRaw = {
       },
     },
     {
-      path: 'update',
-      name: 'update',
+      path: 'updateOrganization',
+      name: 'UpdateOrganization',
       component: () => import('@/views/organization/update/index.vue'),
       meta: {
         hideInMenu: true,

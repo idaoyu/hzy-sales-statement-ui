@@ -279,7 +279,7 @@
       Message.warning('不支持修改类型为"分销商"的机构');
       return;
     }
-    router.push({ path: '/organization/update', query: { id } });
+    router.push({ path: '/organization/updateOrganization', query: { id } });
   };
   const delectOrganization = (record: any) => {
     deleteOrganization(record.id).then((res) => {
