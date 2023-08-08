@@ -138,12 +138,45 @@
         />
       </a-row>
     </a-space>
+    <a-modal
+      v-model:visible="visible"
+      :title="operation"
+      :width="600"
+      @cancel="handleCancel"
+      @before-ok="handleBeforeOk"
+    >
+      <a-form :model="modalForm">
+        <a-form-item field="productName" label="商品名字">
+          <a-input
+            v-model="modalForm.productName"
+            allow-clear
+            :disabled="operation === '修改商品'"
+          >
+            <template #prefix> <icon-message /> </template
+          ></a-input>
+        </a-form-item>
+        <a-form-item field="productAliasName" label="商品标签(别名)">
+          <a-input
+            v-model="modalForm.productAliasName"
+            allow-clear
+            :disabled="operation === '修改商品'"
+          >
+            <template #prefix> <icon-tag /> </template
+          ></a-input>
+        </a-form-item>
+        <a-form-item field="costPrice" label="商品价格">
+          <a-input-number v-model="modalForm.costPrice" allow-clear :step="1.0"
+            ><template #prefix> <icon-compass /> </template
+          ></a-input-number>
+        </a-form-item>
+      </a-form>
+    </a-modal>
   </div>
 </template>
 
 <script lang="ts" setup>
   import { ref } from 'vue';
-  import { listProduct, deleteProduct } from '@/api/product';
+  import { listProduct, deleteProduct, addProduct } from '@/api/product';
   import Message from '@arco-design/web-vue/es/message';
   import router from '@/router';
 
@@ -205,6 +238,20 @@
       costPrice: 0,
     };
     visible.value = true;
+  };
+
+  const handleCancel = () => {
+    visible.value = false;
+    modalForm.value = modalFormInitData;
+  };
+
+  const handleBeforeOk = (done: any) => {
+    const data = modalForm.value;
+    addProduct(data).then((res) => {
+      Message.success(res.data);
+      listGet();
+      done();
+    });
   };
 </script>
 
