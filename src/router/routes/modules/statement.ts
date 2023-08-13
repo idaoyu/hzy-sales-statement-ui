@@ -13,11 +13,11 @@ const DASHBOARD: AppRouteRecordRaw = {
   },
   children: [
     {
-      path: 'market',
-      name: 'market',
-      component: () => import('@/views/statement/index.vue'),
+      path: 'excelHandle',
+      name: 'ExcelHandle',
+      component: () => import('@/views/excel-handle/index.vue'),
       meta: {
-        locale: 'menu.statement.market',
+        locale: 'menu.statement.excle',
         requiresAuth: true,
         roles: ['SuperAdmin', 'UserAdmin', 'Observer'],
       },
