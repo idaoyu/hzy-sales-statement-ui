@@ -5,7 +5,8 @@ export interface TaskFileHandleLog {
   description: string;
   sourceFilePath: string;
   resultFilePath: string;
-  status: number;
+  status: string;
+  handleStep: number;
   errorMessage: string;
   errorType: string;
   errorData: string;

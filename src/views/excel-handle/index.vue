@@ -72,12 +72,12 @@
                   ><icon-question-circle-fill /> 缺少机构或商品配置</a-space
                 >
               </a-tag>
-              <a-tag v-else-if="record.errorType != null" color="#f53f3f"
+              <a-tag v-else-if="record.status === 'error'" color="#f53f3f"
                 ><a-space
                   ><icon-info-circle-fill /> 由于产生错误，已终止</a-space
                 ></a-tag
               >
-              <a-tag v-else-if="record.status === 6" color="#7bc616"
+              <a-tag v-else-if="record.status === 'success'" color="#7bc616"
                 ><a-space><icon-check-circle-fill />已完成</a-space></a-tag
               >
               <a-tag v-else color="#165dff"
@@ -120,7 +120,7 @@
             <template #cell="{ record }">
               <a-space>
                 <a-button
-                  :disabled="record.errorType == null"
+                  :disabled="record.status === 'error' || record === 'warning'"
                   size="small"
                   @click="openErrorMessage(record)"
                   ><icon-question-circle-fill />查看错误信息</a-button
