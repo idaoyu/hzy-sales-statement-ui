@@ -23,6 +23,16 @@ const DASHBOARD: AppRouteRecordRaw = {
       },
     },
     {
+      path: 'paternity',
+      name: 'paternity',
+      component: () => import('@/views/organization/paternity/index.vue'),
+      meta: {
+        locale: 'menu.organization.paternity',
+        requiresAuth: true,
+        roles: ['SuperAdmin', 'UserAdmin', 'Observer'],
+      },
+    },
+    {
       path: 'updateOrganization',
       name: 'UpdateOrganization',
       component: () => import('@/views/organization/update/index.vue'),
