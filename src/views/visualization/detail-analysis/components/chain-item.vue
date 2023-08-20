@@ -335,6 +335,12 @@
     padding: 16px;
     white-space: nowrap;
   }
+
+  .arco-typography {
+    line-height: 1.5715;
+    white-space: unset;
+    overflow-wrap: unset;
+  }
   :deep(.content) {
     float: left;
     width: 108px;
