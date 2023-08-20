@@ -28,6 +28,8 @@ export default {
   'menu.organization.manage': '机构负责人管理',
   'menu.dashboard.grossProfitAnalysis': '数据可视化分析',
   'menu.statement.excle': '上传并生成销售报表',
+  'menu.order': '出货单管理',
+  'menu.order.list': '出货单明细',
   ...localeSettings,
   ...localeMessageBox,
   ...localeLogin,
