@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { number } from 'echarts';
 
 export interface PageParams {
   pageNo: number;
