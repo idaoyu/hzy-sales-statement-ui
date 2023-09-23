@@ -2,11 +2,7 @@
   <div class="navbar">
     <div class="left-side">
       <a-space>
-        <img
-          alt="logo"
-          src="https://public.idaoyu.cn/public/images/9zBzL3do.png"
-          style="width: 33px; height: 33px"
-        />
+        <img alt="logo" :src="logo" style="width: 33px; height: 33px" />
         <a-typography-title
           :style="{ margin: 0, fontSize: '18px' }"
           :heading="5"
@@ -96,6 +92,7 @@
   import { useAppStore, useUserStore } from '@/store';
   import useUser from '@/hooks/user';
   import Menu from '@/components/menu/index.vue';
+  import logo from '@/assets/images/logo.png';
 
   const appStore = useAppStore();
   const userStore = useUserStore();

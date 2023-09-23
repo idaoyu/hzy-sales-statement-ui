@@ -1,11 +1,7 @@
 <template>
   <div class="container">
     <div class="logo">
-      <img
-        alt="logo"
-        src="https://public.idaoyu.cn/public/images/9zBzL3do.png"
-        style="width: 33px; height: 33px"
-      />
+      <img alt="logo" :src="logo" style="width: 33px; height: 33px" />
       <div class="logo-text">合智源数据分析平台</div>
     </div>
     <LoginBanner />
@@ -22,6 +18,7 @@
 
 <script lang="ts" setup>
   import Footer from '@/components/footer/index.vue';
+  import logo from '@/assets/images/logo.png';
   import LoginBanner from './components/banner.vue';
   import LoginForm from './components/login-form.vue';
 </script>

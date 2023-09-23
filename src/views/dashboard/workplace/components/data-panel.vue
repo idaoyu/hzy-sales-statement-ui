@@ -8,8 +8,9 @@
         <a-space>
           <a-avatar :size="54" class="col-avatar">
             <img
+              class="image-style"
               alt="avatar"
-              src="https://public.idaoyu.cn/public/images/余额.png"
+              src="https://oss.zizyy.com/images/hzy-image-01.png"
             />
           </a-avatar>
           <a-statistic
@@ -34,7 +35,8 @@
           <a-avatar :size="54" class="col-avatar">
             <img
               alt="avatar"
-              src="https://public.idaoyu.cn/public/images/股票.png"
+              class="image-style"
+              src="https://oss.zizyy.com/images/hzy-image-02.png"
             />
           </a-avatar>
           <a-statistic
@@ -63,7 +65,8 @@
           <a-avatar :size="54" class="col-avatar">
             <img
               alt="avatar"
-              src="https://public.idaoyu.cn/public/images/资产.png"
+              class="image-style"
+              src="https://oss.zizyy.com/images/hzy-image-03.png"
             />
           </a-avatar>
           <a-statistic
@@ -88,7 +91,8 @@
           <a-avatar :size="54" class="col-avatar">
             <img
               alt="avatar"
-              src="https://public.idaoyu.cn/public/images/概率.png"
+              class="image-style"
+              src="https://oss.zizyy.com/images/hzy-image-04.png"
             />
           </a-avatar>
           <a-statistic
@@ -100,8 +104,8 @@
             :value-style="colorHandle(data.profitGrowth)"
           >
             <template #prefix>
-              <icon-arrow-rise v-if="data.salesGrowth > 0" />
-              <icon-arrow-fall v-else-if="data.salesGrowth < 0" />
+              <icon-arrow-rise v-if="data.profitGrowth > 0" />
+              <icon-arrow-fall v-else-if="data.profitGrowth < 0" />
             </template>
             <template #suffix> 元 </template>
           </a-statistic>
@@ -116,7 +120,8 @@
           <a-avatar :size="54" class="col-avatar">
             <img
               alt="avatar"
-              src="https://public.idaoyu.cn/public/images/更多应用.png"
+              class="image-style"
+              src="https://oss.zizyy.com/images/hzy-image-05.png"
             />
           </a-avatar>
           <a-statistic
@@ -214,5 +219,11 @@
   }
   :deep(.panel-border) {
     margin: 4px 0 0 0;
+  }
+
+  .image-style {
+    width: 40px;
+    height: 40px;
+    margin: 6px 6px;
   }
 </style>
