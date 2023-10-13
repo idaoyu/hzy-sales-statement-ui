@@ -6,11 +6,11 @@
         :span="{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12, xxl: 6 }"
       >
         <a-space>
-          <a-avatar :size="54" class="col-avatar">
+          <a-avatar :size="54" class="col-avatar" :object-fit="{}">
             <img
               class="image-style"
               alt="avatar"
-              src="https://oss.zizyy.com/images/hzy-image-01.png"
+              src="https://oss.zizyy.com/public-images/amount-color.svg"
             />
           </a-avatar>
           <a-statistic
@@ -36,7 +36,7 @@
             <img
               alt="avatar"
               class="image-style"
-              src="https://oss.zizyy.com/images/hzy-image-02.png"
+              src="https://oss.zizyy.com/public-images/content-color.svg"
             />
           </a-avatar>
           <a-statistic
@@ -66,7 +66,7 @@
             <img
               alt="avatar"
               class="image-style"
-              src="https://oss.zizyy.com/images/hzy-image-03.png"
+              src="https://oss.zizyy.com/public-images/recommend-color.svg"
             />
           </a-avatar>
           <a-statistic
@@ -92,7 +92,7 @@
             <img
               alt="avatar"
               class="image-style"
-              src="https://oss.zizyy.com/images/hzy-image-04.png"
+              src="https://oss.zizyy.com/public-images/square-arrow-color.svg"
             />
           </a-avatar>
           <a-statistic
@@ -121,7 +121,7 @@
             <img
               alt="avatar"
               class="image-style"
-              src="https://oss.zizyy.com/images/hzy-image-05.png"
+              src="https://oss.zizyy.com/public-images/visualize-color.svg"
             />
           </a-avatar>
           <a-statistic
@@ -222,8 +222,8 @@
   }
 
   .image-style {
-    width: 40px;
-    height: 40px;
-    margin: 6px 6px;
+    width: 30px;
+    height: 30px;
+    margin: 12px;
   }
 </style>
