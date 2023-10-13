@@ -222,8 +222,8 @@
   }
 
   .image-style {
-    width: 30px;
-    height: 30px;
-    margin: 12px;
+    width: 24px;
+    height: 24px;
+    margin: 16px;
   }
 </style>
