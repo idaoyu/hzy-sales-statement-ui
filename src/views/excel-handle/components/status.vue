@@ -140,6 +140,6 @@
   const openModal = () => {
     timer.value = setInterval(() => {
       fetchData(props.id);
-    }, 200);
+    }, 2000);
   };
 </script>

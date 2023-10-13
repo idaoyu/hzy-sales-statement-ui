@@ -1,7 +1,5 @@
 <template>
-  <a-layout-footer class="footer"
-    >Powered by 知榕易云. 备案号: 黑ICP备2023001863号-1</a-layout-footer
-  >
+  <a-layout-footer class="footer">Powered by 一条秋刀鱼zz.</a-layout-footer>
 </template>
 
 <script lang="ts" setup></script>
