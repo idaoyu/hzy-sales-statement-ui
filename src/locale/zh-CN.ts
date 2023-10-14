@@ -30,6 +30,7 @@ export default {
   'menu.statement.excle': '上传并生成销售报表',
   'menu.order': '出货单管理',
   'menu.order.list': '出货单明细',
+  'menu.product.sellPrice': '分销商出货价管理',
   ...localeSettings,
   ...localeMessageBox,
   ...localeLogin,

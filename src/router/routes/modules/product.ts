@@ -23,6 +23,16 @@ const DASHBOARD: AppRouteRecordRaw = {
       },
     },
     {
+      path: 'sellPrice',
+      name: 'SellPrice',
+      component: () => import('@/views/product/sellPrice/index.vue'),
+      meta: {
+        locale: 'menu.product.sellPrice',
+        requiresAuth: true,
+        roles: ['SuperAdmin', 'UserAdmin', 'Observer'],
+      },
+    },
+    {
       path: 'updateProduct',
       name: 'UpdateProduct',
       component: () => import('@/views/product/update/index.vue'),

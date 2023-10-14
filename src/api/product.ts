@@ -35,3 +35,7 @@ export function updateProduct(id: any, data: any) {
 export function addProduct(data: Product) {
   return axios.post('/api/product', data);
 }
+
+export function searchProduct(name: string) {
+  return axios.get('/api/product/search', { params: { name } });
+}
