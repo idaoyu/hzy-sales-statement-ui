@@ -1,3 +1,4 @@
+import { PieChart } from 'echarts/charts';
 import { BannerDTO } from '@/store/modules/dashboard/types';
 import axios from 'axios';
 
@@ -24,6 +25,11 @@ export interface ResponsibleForShipmentAnalysisDTO {
   totalPrice: number;
 }
 
+export interface PieChart {
+  key: string;
+  value: number;
+}
+
 export function getBannerData(params: any) {
   return axios.get<BannerDTO>('/api/dashboard/general_situation', { params });
 }
@@ -41,6 +47,13 @@ export function getStatisticalData(params: any) {
 export function responsibleForShipmentAnalysis(params: any) {
   return axios.get<ResponsibleForShipmentAnalysisDTO>(
     '/api/dashboard/responsible_for_shipment_analysis',
+    { params }
+  );
+}
+
+export function proditComposition(params: any) {
+  return axios.get<PieChart[]>(
+    '/api/dashboard/share-of-profits-of-various-organizations',
     { params }
   );
 }

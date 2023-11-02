@@ -7,7 +7,7 @@
     <a-grid :cols="24" :col-gap="12" :row-gap="12">
       <a-grid-item :span="{ xs: 12, sm: 12, md: 12, lg: 12, xl: 6, xxl: 6 }">
         <ChainItem
-          title="总销售额"
+          title="总销售额（总共的价税合计）"
           quota="salesVolume"
           chart-type="line"
           :date="date"
@@ -21,7 +21,7 @@
       </a-grid-item>
       <a-grid-item :span="{ xs: 12, sm: 12, md: 12, lg: 12, xl: 6, xxl: 6 }">
         <ChainItem
-          title="总毛利率"
+          title="总毛利率（带来百分之多少的毛利润）"
           quota="profitRate"
           chart-type="bar"
           :date="date"
@@ -35,7 +35,7 @@
       </a-grid-item>
       <a-grid-item :span="{ xs: 12, sm: 12, md: 12, lg: 12, xl: 6, xxl: 6 }">
         <ChainItem
-          title="总毛利润"
+          title="总毛利润（具体毛利润金额）"
           quota="grossProfit"
           chart-type="line"
           :date="date"
@@ -49,7 +49,7 @@
       </a-grid-item>
       <a-grid-item :span="{ xs: 12, sm: 12, md: 12, lg: 12, xl: 6, xxl: 6 }">
         <ChainItem
-          title="当月出货量TOP6"
+          title="出货最多的商品"
           quota="quantityShipment"
           chart-type="pie"
           :date="date"

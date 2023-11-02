@@ -54,11 +54,13 @@
             <a-row>
               <a-col :span="6">
                 <a-form-item field="name" label="商品名字">
-                  <a-input
-                    v-model="searchForm.productName"
+                  <a-auto-complete
+                    v-model:model-value="searchForm.productName"
                     allow-clear
+                    :data="searchProductData"
                     placeholder="请输入商品名字"
                     style="width: 254px"
+                    @search="handleSearchProduct"
                   /> </a-form-item
               ></a-col>
             </a-row>
@@ -234,6 +236,7 @@
   import { ref } from 'vue';
   import useLoading from '@/hooks/loading';
   import { PageGetParams, pageGet, searchOrganizationName } from '@/api/order';
+  import { searchProduct } from '@/api/product';
 
   const { loading, setLoading } = useLoading(true);
 
@@ -285,6 +288,17 @@
       searchData.value = data;
     } else {
       searchData.value = [];
+    }
+  };
+
+  const searchProductData = ref([]);
+
+  const handleSearchProduct = async (value: string) => {
+    if (value) {
+      const { data } = await searchProduct(value);
+      searchProductData.value = data;
+    } else {
+      searchProductData.value = [];
     }
   };
 

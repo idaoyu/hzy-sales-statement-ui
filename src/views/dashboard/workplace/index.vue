@@ -22,18 +22,13 @@
     <div class="right-side">
       <a-grid :cols="24" :row-gap="16">
         <a-grid-item :span="24">
-          <div class="panel moduler-wrap">
-            <QuickOperation />
-          </div>
+          <ProfitComposition />
         </a-grid-item>
         <a-grid-item class="panel" :span="24">
           <Carousel />
         </a-grid-item>
         <a-grid-item class="panel" :span="24">
           <Announcement />
-        </a-grid-item>
-        <a-grid-item class="panel" :span="24">
-          <Docs />
         </a-grid-item>
       </a-grid>
     </div>
@@ -47,10 +42,9 @@
   import ContentChart from './components/content-chart.vue';
   import PopularContent from './components/popular-content.vue';
   import CategoriesPercent from './components/categories-percent.vue';
-  import QuickOperation from './components/quick-operation.vue';
+  import ProfitComposition from './components/profit-composition.vue';
   import Announcement from './components/announcement.vue';
   import Carousel from './components/carousel.vue';
-  import Docs from './components/docs.vue';
 
   const store = useDashboardStore();
 

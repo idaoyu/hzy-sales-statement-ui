@@ -120,7 +120,9 @@
             <template #cell="{ record }">
               <a-space>
                 <a-button
-                  :disabled="record.status === 'error' || record === 'warning'"
+                  :disabled="
+                    record.status === 'success' || record.status === 'inProcess'
+                  "
                   size="small"
                   @click="openErrorMessage(record)"
                   ><icon-question-circle-fill />查看错误信息</a-button

@@ -113,7 +113,7 @@
           const list = params as ToolTipFormatterParams[];
           return `<div>
             <p class="tooltip-title">${list[0].axisValueLabel}</p>
-            <div class="content-panel"><span>净利润</span><span class="tooltip-value">${list[0].value} 万元</span></div>
+            <div class="content-panel"><span>毛利润</span><span class="tooltip-value">${list[0].value} 万元</span></div>
           </div>`;
         },
         className: 'echarts-tooltip-diy',
@@ -124,7 +124,7 @@
       series: [
         // 总净利润
         {
-          name: '净利润',
+          name: '毛利润',
           data: netProfitData.value,
           type: 'line',
           smooth: true,
